@@ -1,0 +1,51 @@
+
+  # cat=basic/enable; type=boolean; label=disable use with IMAGE: Disables the possibility to use imagemaps with the content types IMAGE and IMAGE WITH TEXT to avoid possible conflicts with other plugins.
+disable_IMAGE = 0
+
+  # cat=basic/enable; type=boolean; label=allow adding colors for edit-view: Gives a BE user the possibility to add customized border colors to an area.
+add_colors = 1
+
+  # cat=basic/enable; type=boolean; label=allow shared use of added colors: customized border colors of one area can be used for all other imagemaps.
+overall_colors = 0
+
+  # cat=basic/enable; type=boolean; label=force type of overlay-images: 0=gif , 1=png. Is overridden by "automatic overlay".
+fe_force_overlay = 1
+
+  # cat=basic/enable; type=boolean; label=automatic overlay: If this is set, gif-overlays will be used automatically if the browser is IE6.
+fe_auto_overlay = 1
+
+  # cat=basic/enable; type=boolean; label=title-attribute: Display the "title" attribute automatically if no "title" attribute is assigned to an area
+fe_title = 1
+
+  # cat=basic/enable; type=boolean; label=clear page cache when changing data: Clears the page cache whenever an imagemap is changed
+fe_clearpagecache = 1
+
+  # cat=basic/; type=string; label=default border color 1
+def_color1 = #00FF00|en:Green,de:Gr&uuml;n
+
+  # cat=basic/; type=string; label=default border color 2
+def_color2 = #0000FF|en:Blue,de:Blau
+
+  # cat=basic/; type=string; label=default border color 3
+def_color3 = #FF8040|en:Orange,de:Orange
+
+  # cat=basic/; type=string; label=default border color 4
+def_color4 = #00FFFF|en:Turquoise,de:T&uuml;rkis
+
+  # cat=basic/; type=string; label=default border color 5
+def_color5 = #8D38C|en:Violet,de:Violett
+
+  # cat=basic/; type=string; label=default border color 6
+def_color6 = #FF00FF|en:Magenta,de:Magenta
+
+  # cat=basic/; type=string; label=default border color 7
+def_color7 =
+
+  # cat=basic/; type=string; label=default border color 8
+def_color8 =
+
+  # cat=basic/; type=string; label=default border color 9
+def_color9 =
+
+  # cat=basic/; type=string; label=default border color 10
+def_color10 =

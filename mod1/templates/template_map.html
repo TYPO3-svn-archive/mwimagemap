@@ -1,0 +1,103 @@
+<!--###ADD_PART### -->
+<script type="text/javascript">
+var showoptions = '###L_SHOWOPTIONS###';
+var hideoptions = '###L_HIDEOPTIONS###';
+</script>
+<a href="Javascript:a_toggle('a_create');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="a_createtoggle" alt="###L_SHOWOPTIONS###" title="###L_HIDEOPTIONS###" /> ###CREATEMAP###</h3></a>
+<div id="a_create" style="border:1px solid #999999; padding:8px; margin:5px 0px 10px 0px;width:518px;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+<form action="" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="map_page" value="1" />
+	<input type="hidden" name="action" value="add" />
+	<input type="hidden" name="id" value="###PATHID###" />
+	<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+	<table cellpadding="0" cellspacing="0">
+		<tr>
+			<td style="padding:5px 0px;">###MAP_NAME###:</td>
+			<td style="padding:5px 0px;"><input type="text" name="name" style="width:165px;" /></td>
+		</tr>
+		<tr>
+			<td style="padding:5px 0px;">###PICTURE###:</td>
+			<td style="padding:5px 0px;"><input type="file" name="usr_file" /></td>
+		</tr>	
+		<tr>
+			<td style="padding:5px 0px;">###USE_PICTURE###:</td>
+			<td style="padding:5px 0px;"><select name="use_pic" style="width:165px;"><option></option>###OPTIONS###</select></td>
+		</tr>			
+		<tr>
+			<td style="padding:5px 0px;">###USE_MAP###:</td>
+			<td style="padding:5px 0px;"><select name="use_map" style="width:165px;"><option></option>###OPTIONS###</select></td>
+		</tr>
+		<tr>
+			<td style="padding:5px 0px;">###USE_FILE###:</td>
+			<td style="padding:5px 0px;"><select name="use_file" style="width:165px;"><option></option>###FILE_OPTIONS###</select></td>
+		</tr>
+		<tr>
+			<td colspan="2"  style="padding-top:7px;"><input type="submit" value="###ADD_SUBMIT###" /></td>
+		</tr>		
+	</table>	
+</form>
+</div>
+<!-- ###ADD_PART###--!>
+
+<!--###LIST_PART### -->
+<script language="JavaScript">
+function del_imagemap( id ) {
+  try {
+	  if ( document.getElementById('check_'+id).checked ) {
+		  return confirm('###DELIMG1###');
+	  }
+		else {
+		  return confirm('###DELIMG2###');
+	  }
+  } catch(e) { return confirm('###ERROC### '+e+' \n\n###CONTACTION###'); }
+}
+
+function save_imagemap(id) {
+  try {
+	  if ( document.getElementById('file_'+id).value == '' ) { return true; }
+	  if ( document.getElementById('check_'+id).checked ) {
+		  return confirm('###DELIMG1###');
+	  }
+		else {
+		  return confirm('###DELIMG2###');
+	  }
+  } catch(e) { return confirm('###ERROC### '+e+' \n\n###CONTACTION###'); }
+}
+</script>
+<a href="Javascript:a_toggle('a_list');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="a_listtoggle" alt="###L_SHOWOPTIONS###" title="###L_HIDEOPTIONS###" /> ###EIM###</h3></a>
+<div style="border:1px solid #999999; padding:8px;padding-bottom:0px; margin:5px 0px 5px 0px;width:518px;" id="a_list">
+###LIST###
+</div>
+<!-- ###LIST_PART###-->
+
+<!--###LIST_ITEM### -->
+<form method="post" action="" name="f_###ID###" enctype="multipart/form-data" style="margin:0px;padding:0px;">
+	<input type="hidden" name="id" value="###PATHID###">
+	<input type="hidden" name="map_id" value="###ID###" size="15" />
+	<input type="hidden" name="action" value="" />
+	<a href="Javascript:a_toggle('a_n###ID###');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="a_n###ID###toggle" alt="###L_SHOWOPTIONS###" title="###L_HIDEOPTIONS###" /> ###NAME###</h3></a>
+  <table id="a_n###ID###" border="0" cellpadding="0" cellspacing="0" style="width:100%;border:1px solid #999999; padding:10px; margin-bottom:8px;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+    <tr>
+			<td valign="top"><div style="border:1px solid #999999;padding:2px;width:###TW###px;background-color:#EFEFF4;"><a href="index.php?area_page=1&map_id=###ID###&id=###PATHID###"><img src="###SRC###" /></a></div><br /><img src="clear.gif" height="1" width="229" /></td>
+			<td valign="top">
+				<div>###NEW_PICTURE###</div>
+				<div><input type="file" id="file_###ID###" name="usr_file" /></div>
+				<table cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td style="padding:7px 4px 0px 0px;"><input type="text" name="name" value="###NAME###" style="width:165px;" /></td>
+						<td style="padding:7px 4px 0px 0px;"><a href="Javascript:document.forms['f_###ID###'].action.value='chg_name';document.forms['f_###ID###'].submit()" onclick=" return save_imagemap(###ID###);"><img src="img/savedok.gif" alt="###L_SAVE###" title="###L_SAVE###" border="0" /></a></td>
+						<td style="padding:7px 0px 0px 0px;"><a href="Javascript:document.forms['f_###ID###'].action.value='del';document.forms['f_###ID###'].submit()" onclick=" return del_imagemap(###ID###);"><img src="img/garbage.gif" alt="###L_DEL###" title="###L_DEL###" border="0" /></a></td>
+					</tr>
+				</table>
+				<table cellpadding="0" cellspacing="0" border="0">
+					<tr>
+					  <td style="padding:7px 0px 0px 0px;"><input type="checkbox" id="check_###ID###" name="del_unused" /></td>
+						<td>&nbsp;</td>
+						<td style="padding:5px 0px 0px 0px;">###DEL_UNUSED###</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+  </table>
+</form>
+<!-- ###LIST_ITEM###-->
