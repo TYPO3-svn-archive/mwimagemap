@@ -1,0 +1,3 @@
+09-02-20 Sonja Scholz <ss@cabag.ch>
+	* Extension marked as modified
+	* ext_localconf.php - only load xclass of tslib_content if extension manager option disable_IMAGE isn't set
