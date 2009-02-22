@@ -1,0 +1,863 @@
+<!-- ###EDIT_PART### -->
+<script type="text/javascript">
+var showoptions = '###L_SHOWOPTIONS###';
+var hideoptions = '###L_HIDEOPTIONS###';
+</script>
+
+<form name="edit_form" id="edit_form" action="" method="post" style="padding:0px;margin:0px;">
+  <input type="hidden" name="area_page" value="1" />
+	<input type="hidden" id="area_id" name="area_id" value="###AID###" />
+	<input type="hidden" name="action" value="edit" />
+	<input type="hidden" name="map_id" value="###MID###" />
+	<input type="hidden" id="type" name="type" value="###VTYPE###" />
+	<input type="hidden" name="id" value="###PATHID###" />
+				
+	<a href="Javascript:a_toggle('l_area');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="l_areatoggle" alt="###L_SHOWOPTIONS###" title="###L_HIDEOPTIONS###" /> ###L_EDITAREA###</h3></a>
+  <table cellpadding="0" id="l_area" cellspacing="0" style="border:1px solid #999999; margin:5px 0px 10px 0px; width:100%;">
+    <tr>
+      <td valign="top" style="padding:8px;">###L_TYPE###&nbsp;<strong>###DESCRIPT###</strong>
+				
+        <table cellpadding="0" cellspacing="0" style="border:1px solid #999999; margin:5px 0px 10px 0px; width:100%;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+          <tr>
+            <td style="padding:5px;width:100%;" id="top"><div>###L_DESCRIPTION###:</div>
+              <input type="text" id="descript" name="descript" value="###DESCRIPT###" style="width:100%;" />
+						</td>
+						<td valign="bottom" style="padding-bottom:5px;white-space:nowrap;"><input type="checkbox" id="blink" name="blink" value="1" onClick="change_blink();" ###BLINK### />&nbsp;###L_BLINK###&nbsp;</td>
+          </tr>
+        </table>
+				###FRAME###
+				###TYP_SPECIFIC###
+				###TYP_SPECIFIC1###
+				<a href="Javascript:a_toggle('link');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="linktoggle" alt="###L_SHOWOPTIONS###" title="###L_SHOWOPTIONS###" /> ###L_LINK###:</h3></a>
+        <table id="link" cellpadding="0" cellspacing="0" style="display:block;border:1px solid #999999; margin:5px 0px 10px 0px; width:100%;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+          <tr>
+            <td style="padding:5px;"><div>###L_LINK###:</div>
+              <div style="width:100%"><input type="text" id="link" name="link" value="###LINK###" style="width:380px;" />###LINK_FUNC###</div>
+              <div style="padding-top:10px">###L_PARAM###</div>
+              <input type="text" id="param" name="param" value="###PARAM###" style="width:100%;" />
+            </td>
+          </tr>
+        </table>
+        ###FEOPTIONS###
+			  <input type="submit" name="submittext" value="###L_EDIT###" style="margin-top:5px;">	
+			</td>
+		</tr>
+	</table>
+</form>
+<!-- ###EDIT_PART### -->
+
+<!-- ###FE_PART### -->
+<input type="hidden" id="s_bcol" value="###FE_BCOL###" />
+<input type="hidden" id="s_bthc" value="###BT###" />
+<a href="Javascript:a_toggle('feoptions');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="feoptionstoggle" alt="###L_HIDEOPTIONS###" title="###L_SHOWOPTIONS###" /> ###FE_OPTIONS###</h3></a>
+<table id="feoptions" style="border:1px solid #999999;width:100%;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_FE_HIDDEN###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2"><input type="radio" id="fe_visible1" name="fe_visible" value="0" ###CHECK_FE_VISIBLE0### onclick="checkvisible()" /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_FE_VISIBLE###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2"><input type="radio" id="fe_visible2" name="fe_visible" value="1" ###CHECK_FE_VISIBLE1### onclick="checkvisible()" /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_FE_MOUSEOVER###:&nbsp;</td>
+		<td style="padding:5px;"><input type="radio" id="fe_visible3" name="fe_visible" value="2" ###CHECK_FE_VISIBLE2### onclick="checkvisible()" /></td>
+		<td style="padding:5px;width:100%;">(GET: mwi_area=###AID###)</td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_FE_BORDERCOLOR###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2">
+      <input type="text" id="fe_bcol" name="fe_bcol" value="###FE_BCOL###" style="width:70px;" maxlength="7" />
+      <input type="button" id="fe_bcol_but" value=" " style="background-color:###FE_BCOL###;border:1px solid #000000;width:16px;height:16px;" onClick="showColorPicker(this,document.getElementById('fe_bcol'),'fe_bcol_but',1)"/>
+		</td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_FE_BORDERTHICKNESS###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2"><input type="text" id="fe_borderthickness" name="fe_borderthickness" value="###BT###" maxlength="2" style="width:30px;" /></td>
+	</tr>
+</table>
+<!-- ###FE_PART### -->
+
+<!-- ###FRAME_PART### -->
+				<a href="Javascript:a_toggle('frame');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="frametoggle" alt="###L_SHOWOPTIONS###" title="###L_SHOWOPTIONS###" /> ###L_BORDER###</h3></a>
+        <script type="Text/Javascript">
+				var ocols  = '###OCOL###';
+				var delcol = '###DELCOL###';
+				</script>
+				<table id="frame" cellpadding="0" cellspacing="0" style="display:block;border:1px solid #999999; margin:0px 0px 10px 0px; width:100%;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+          <tr>
+            <td style="padding:5px;">
+						  <div>###L_COLOR###:</div>
+              <select name="color" id="sel_col" onChange="change_color();" style="width:165px;margin-right:0px;" onFocus="Javascript:tbg_ov(document.getElementById('frame'))" onBlur="Javascript:tbg_out(document.getElementById('frame'))">
+                ###COLORS###
+              </select>###ADDCOLOR###
+						</td>
+          </tr>
+        </table>
+				<script type="Text/Javascript">
+				  if(document.getElementById('coldel')) {
+				    document.getElementById('coldel').style.visibility = "###VISIBLE###";
+					}
+				</script>
+<!-- ###FRAME_PART### -->
+
+<!-- ###ADDCOL_PART### -->
+<span style="padding-bottom:8px;visibility:hidden;margin-left:0px;" id="coldel"><a href="Javascript:delCol();"><img src="img/garbage.gif" title="###DELETE###" alt="###DELETE###" border="0" /></a></span>
+<input type="hidden" id="addcols" name="addcols" value="" />
+<input type="hidden" id="addcolnames" name="addcolnames" value="" />
+<input type="hidden" id="delcols" name="delcols" value="" />
+<input type="hidden" id="delcolnames" name="delcolnames" value="" />
+<script type="Text/Javascript">
+	x_focus       = 0;
+	xtc           = setInterval("check_be_colname()",200);
+	var coldelmsg = '###DELCONF###';
+</script>
+	<div style="margin-top:10px;">###L_ADDCOLOR###</div>
+  <span style="padding-bottom:8px;"> ###L_NAME###:</span>
+  <input type="text" id="be_colname" name="be_colname" value="" style="width:150px;" maxlength="20" onfocus="Javascript:x_focus=1;" onblur="Javascript:x_focus=0;" />&nbsp;&nbsp;###L_COLOR###:
+  <input type="text" id="be_col" name="be_col" value="" style="width:70px;" maxlength="7" onblur="validateColor('be_col','be_col_but','be_colname')" />
+  <input name="be_col_but" type="button" id="be_col_but" style="background-color:#FFFFFF;border:1px solid #000000;width:16px;height:16px;" onClick="showColorPicker(this,document.getElementById('be_col'),'be_col_but',0)" value=" "/>
+	&nbsp;&nbsp;<input name="ok_but" type="button" id="ok_but" value="OK" onclick="Javascript:addcol();this.blur()" />
+	<script type="Text/Javascript">
+  function check_be_colname() {
+    elmval = document.getElementById('be_colname');
+    if(elmval.value.length == 0) {
+	    if(x_focus == 0) {
+		    if(document.getElementById('be_col').value.length != 0) { elmval.value = document.getElementById('be_col').value; }
+		  }
+	  }
+	  else {
+	    if(x_focus == 0) { elmval.value = elmval.value.replace(/\,/,"_"); }
+	  }
+  }
+	</script>
+<!-- ###ADDCOL_PART### -->
+
+<!-- ###POLY_PART### -->
+<script type="text/javascript">
+var polynum = ###NUM###;
+var akt_polynum = polynum;
+var pchecked = 0;
+var obj_per_tr = 5;
+var col1 = "#ede9e5";
+var col2 = "#cdc7c3";
+var pt_num_txt = '###L_NUM1### ';
+var pt_edit_txt = '###L_EDIT_PT###: ';
+var pt_del_txt = '###L_DEL1### ';
+var pt_x_txt = '###L_X###: ';
+var pt_y_txt = '###L_Y###: ';
+var pos_opt_txt = '. ###L_POS###';
+var deleted_pts = 0;
+var pt_deleted_txt = '###L_DELETED###';
+</script>
+<script type="text/javascript" src="js/poly.js"></script>
+<input type="hidden" id="polynum" name="polynum" value="###NUM###" />
+
+  <a href="Javascript:a_toggle('addpoint');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="addpointtoggle" alt="###L_SHOWOPTIONS###" title="###L_SHOWOPTIONS###" /> ###L_ADDPT###:</h3></a>
+  <table id="addpoint" cellpadding="0" cellspacing="0" style="display:block;border:1px solid #999999; margin:5px 0px 10px 0px; width:100%;" onMouseOver="Javascript:tbg_ov(this);objs[selectedid].reset_dom();" onMouseOut="Javascript:tbg_out(this)">
+	<tr>
+	  <td style="padding:5px;" colspan="2"><input type="checkbox" id="rpoly" name="rpoly" value="add" onClick="myrpoly(0); objs[selectedid].reset_dom();" checked="checked" />&nbsp;###POLYCLICK###</td>
+	</tr>
+	<tr>
+		<td style="padding:5px;" colspan="2">###L_XPOS###:&nbsp;<input type="text" id="xpos0" name="xpos" style="width:80px;" />&nbsp;&nbsp;&nbsp;###L_YPOS###:&nbsp;<input type="text" id="ypos0" name="ypos" style="width:80px;" /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_CLOSE###&nbsp;</td>
+		<td style="padding:5px;width:100%;"><input type="checkbox" id="close" name="close" onClick="objs[selectedid].reset_dom();" value="1" ###CLOSE### /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_MSTART###&nbsp;</td>
+		<td style="padding:5px;width:100%;"><input type="checkbox" id="endpoint" name="epoint" onClick="objs[selectedid].reset_dom();" value="1" ###EPOINT### /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_MEND###&nbsp;</td>
+		<td style="padding:5px;width:100%;"><input type="checkbox" id="startpoint" name="spoint" onClick="objs[selectedid].reset_dom();" value="1" ###SPOINT### /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_POS###:ewr&nbsp;</td>
+		<td style="padding:5px;width:100%;">
+			<select id="pos" name="pos">
+				<option value="end">###L_END###</option>
+		    <option value="begin">###L_BEGIN###</option>
+			</select>	
+		</td>
+	</tr>
+	<tr>
+		<td style="padding:5px;" colspan="2">
+			<input type="button" value="###L_ADDPT###" id="add_b" onclick="add_point(); build_pos_sel(); objs[selectedid].reset_dom();" />
+		</td>	
+	</tr>
+</table>
+<script type="text/javascript">
+build_pos_sel();
+</script>
+<!-- ###POLY_PART### -->
+
+<!-- ###POINTS### -->
+<td id="p_###NUM###" style="border:1px solid #999999;padding:5px;width:20%;background-color:#EDE9E5" onMouseOver="Javascript:tbg_ov3(this)" onMouseOut="Javascript:tbg_out3(this)">
+  <input name="hidden" type="hidden" id="persistent###NUM###" value="1" />
+  <div id="pt_div###NUM###" style="padding-bottom:7px;font-weight:bold;">###L_POINT### ###NUM###:</div>
+  <div style="padding-bottom:5px;white-space:nowrap;"> <img src="img/pencil.gif" id="rpoly###NUM###" width="14" height="14" onClick="myrpoly(###NUM###); objs[selectedid].reset_dom();">&nbsp;&nbsp;&nbsp;
+    <input id="del###NUM###" type="checkbox" name="del###NUM###" value="1" onClick="del_click(###NUM###); build_pos_sel(); objs[selectedid].reset_dom();" />
+    <img src="img/garbage.gif" width="11" height="12" alt="###L_DEL###" title="###L_DEL###">
+	</div>
+  ###L_XPOS###:&nbsp;<input type="text" id="xpos###NUM###" name="xpos###NUM###" value="###XPOS###" size="4" onFocus="myrpoly(###NUM###); objs[selectedid].reset_dom();" onChange="objs[selectedid].reset_dom();" /><br />
+  ###L_YPOS###:&nbsp;<input type="text" id="ypos###NUM###" name="ypos###NUM###" value="###YPOS###" size="4" onFocus="myrpoly(###NUM###); objs[selectedid].reset_dom();" onChange="objs[selectedid].reset_dom();" />
+</td>
+<!-- ###POINTS### -->
+
+
+<!-- ###RECT_PART### -->
+<script type="text/javascript">
+debug = 0;
+function imgonclick(Event)
+{
+	var xelem;
+	var yelem;
+	var posx = -1;
+	var posy = -1;
+	
+	if ( jg_ie )
+	{
+		posx += 1;
+		posy += 1;
+	}
+
+	if ( wrong_coord )
+	{
+		posx = wx;
+		posy = wy;
+	}
+
+	if ( is_a_obj(Event) ) return;
+
+	try {
+		if ( typeof Event.layerX == 'undefined' ) throw("bla");
+		posx += Event.layerX;
+		posy += Event.layerY;
+	} catch(e) {
+		try {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		} catch(e) { alert(e+" Onclick functionality not supported!"); return; }
+	}
+	try {
+		if ( document.getElementById("occ").checked )
+		{
+			if ( posx <= document.getElementById('xpos').value || posy <= document.getElementById('ypos').value )
+				return;
+			document.getElementById("xsize").value = posx - document.getElementById("xpos").value;
+			document.getElementById("ysize").value = posy - document.getElementById("ypos").value;
+		} else {
+			document.getElementById("xpos").value = posx;
+			document.getElementById("ypos").value = posy;
+		}
+		objs[selectedid].reset_dom('xpos', 'ypos', 'xsize', 'ysize');
+	} catch (e)  { alert("fehler"+e); }
+}
+
+</script>
+<h3 class="uppercase"><a href="Javascript:a_toggle('sizepos');"><img src="img/minus.gif" border="0" id="sizepostoggle" alt="###L_SHOWOPTIONS###" title="###L_SHOWOPTIONS###" /></a> ###L_SIZEPOS###</h3>
+<table id="sizepos" cellpadding="0" cellspacing="0" style="display:block;border:1px solid #999999; margin:5px 0px 10px 0px; width:100%;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+  <tr>
+    <td style="padding:5px;">
+		  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td valign="top">
+					  <table width="100%" border="0" cellpadding="0">
+              <tr>
+                <td colspan="2"><input type="radio" id="occ" name="occ" value="lr" checked />&nbsp;###L_SET_SIZE###</td>
+              </tr>
+              <tr>
+                <td width="55">###L_XSIZE###:</td>
+                <td><input type="text" id="xsize" name="xsize" value="###XSIZE###" onChange="objs['###AID###'].reset_dom('xpos', 'ypos', 'xsize', 'ysize');" /></td>
+              </tr>
+              <tr>
+                <td>###L_YSIZE###:</td>
+                <td><input type="text" id="ysize" name="ysize" value="###YSIZE###" onChange="objs['###AID###'].reset_dom('xpos', 'ypos', 'xsize', 'ysize');" /></td>
+              </tr>
+            </table>
+				  </td>
+          <td>&nbsp;&nbsp;</td>
+          <td valign="top">
+				    <table width="100%" border="0" cellpadding="0">
+              <tr>
+                <td colspan="2"><input type="radio" name="occ" value="ul" />&nbsp;###L_SET_POS###</td>
+              </tr>
+              <tr>
+                <td>###L_XPOS###:</td>
+                <td><input type="text" id="xpos" name="xpos" value="###XPOS###" onChange="objs['###AID###'].reset_dom('xpos', 'ypos', 'xsize', 'ysize');" /></td>
+              </tr>
+              <tr>
+                <td>###L_YPOS###:</td>
+                <td><input type="text" id="ypos" name="ypos" value="###YPOS###" onChange="objs['###AID###'].reset_dom('xpos', 'ypos', 'xsize', 'ysize');" /></td>
+              </tr>
+            </table>
+		  		</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ###RECT_PART### -->
+
+<!-- ###CIRCLE_PART### -->
+<script type="text/javascript">
+
+function imgonclick(Event)
+{
+	var xelem;
+	var yelem;
+	var posx = -1;
+	var posy = -1;
+	
+	if ( jg_ie )
+	{
+		posx += 1;
+		posy += 1;
+	}
+
+	if ( wrong_coord )
+	{
+		posx = wx;
+		posy = wy;
+	}
+
+	if ( is_a_obj(Event) ) return;
+
+	try {
+		if ( typeof Event.layerX == 'undefined' ) throw("bla");
+		posx += Event.layerX;
+		posy += Event.layerY;
+	} catch(e) {
+		try {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		} catch(e) { alert(e+" Onclick functionality not supported!"); return; }
+	}
+
+	try {
+		px = document.getElementById("xpos");
+		py = document.getElementById("ypos");
+		pr = document.getElementById("radius");
+		if ( document.getElementById("ocfun").checked )
+		{
+			px.value = posx;
+			py.value = posy;
+		} else {
+			posx = Math.abs( px.value - posx );
+			posy = Math.abs( py.value - posy );
+			pr.value = Math.round( Math.sqrt( Math.pow(posx, 2) + Math.pow(posy, 2) ) );
+		}
+		objs[selectedid].reset_dom('xpos', 'ypos', 'radius');
+	} catch (e)  { alert("fehler"+e); }
+}
+
+</script>
+<h3 class="uppercase"><a href="Javascript:a_toggle('sizepos');"><img src="img/minus.gif" border="0" id="sizepostoggle" alt="###L_SHOWOPTIONS###" title="###L_SHOWOPTIONS###" /></a> ###L_SIZEPOS###</h3>
+<table id="sizepos" cellpadding="0" cellspacing="0" style="display:block;border:1px solid #999999; margin:5px 0px 10px 0px; width:100%;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+  <tr>
+    <td style="padding:5px;">
+		  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td valign="top">
+					  <table width="100%" border="0" cellpadding="0">
+              <tr>
+                <td colspan="2"><input type="radio" id="occ" name="occ" value="lr" checked />&nbsp;###L_SETRADIUS###:</td>
+              </tr>
+              <tr>
+                <td width="55">###L_RADIUS###:</td>
+                <td><input type="text" id="radius" name="radius" value="###RADIUS###" onchange="objs[selectedid].reset_dom('xpos', 'ypos', 'radius');" /></td>
+              </tr>
+            </table>
+				  </td>
+          <td>&nbsp;&nbsp;</td>
+          <td valign="top">
+				    <table width="100%" border="0" cellpadding="0">
+              <tr>
+                <td colspan="2"><input type="radio" name="occ" id="ocfun" value="ul" />&nbsp;###L_SET_POS###</td>
+              </tr>
+              <tr>
+                <td>###L_XPOS###:</td>
+                <td><input type="text" id="xpos" name="xpos" value="###XPOS###" onchange="objs[selectedid].reset_dom('xpos', 'ypos', 'radius');" /></td>
+              </tr>
+              <tr>
+		            <td>###L_YPOS###:</td>
+		            <td><input type="text" id="ypos" name="ypos" value="###YPOS###" onchange="objs[selectedid].reset_dom('xpos', 'ypos', 'radius');" /></td>
+	            </tr>
+            </table>
+		  		</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ###CIRCLE_PART### -->
+
+<!-- ###ADD_PART### -->
+###CHGSCRIPT###
+<a href="Javascript:a_toggle('area_add');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="area_addtoggle" alt="###L_SHOWOPTIONS###" title="###L_SHOWOPTIONS###" /> ###ADDLINKAREA###</h3></a>
+<form id="add_form" name="add_form" action="" method="post" onSubmit="return check_chg_vars();" style="margin:0px;padding:0px;">
+  <input type="hidden" name="area_page" value="1" />
+  <input type="hidden" name="map_id" value="###MID###" />
+  <input type="hidden" name="action" value="add" />
+  <input type="hidden" name="id" value="###PATHID###" />
+  <table cellpadding="0" id="area_add" cellspacing="0" style="border:1px solid #999999; padding:0px; margin:5px 0px 10px 0px; width:100%;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+    <tr>
+      <td style="padding:10px 0px 0px 10px;">###L_DESCRIPTION###:</td>
+      <td style="padding:10px 0px 0px 0px;"><div style="padding-left:10px;">###L_TYPE###:</div></td>
+      <td style="padding:10px 10px 0px 0px;"><div style="padding-left:10px;">###L_LINK###:</div></td>
+    </tr>
+    <tr>
+      <td style="padding:0px 0px 0px 10px;"><input type="text" name="descript"  style="width:165px;" /></td>
+      <td>
+				<div style="padding:0px 10px;">
+          <select name="type">
+			    <option value="0">###L_RECTANGLE###</option>
+					<option value="1">###L_CIRCLE###</option>
+					  <option value="2">###L_POLYGON###</option>
+					  <option value="3">###L_DEFAULT###</option>
+          </select>
+        </div>
+		  </td>
+      <td style="padding:0px 10px 0px 0px;">
+				<div style="float:left; width:123px;">
+          <input type="text" name="link" style="width:120px;" />
+        </div>
+        <div style="float:left; width:30px;">###LINK_FUNC###</div>
+			</td>
+    </tr>
+    <tr>
+      <td colspan="3" style="padding:7px 0px 10px 10px;"><input type="submit" value="###L_ADD###" /></td>
+    </tr>
+  </table>
+</form>
+<!-- ###ADD_PART### -->
+
+
+<!-- ###LIST_PART### -->
+<script type="text/javascript">
+var showoptions = '###L_SHOWOPTIONS###';
+var hideoptions = '###L_HIDEOPTIONS###';
+</script>
+<a href="Javascript:a_toggle('arealist');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="arealisttoggle" alt="###L_SHOWOPTIONS###" title="###L_SHOWOPTIONS###" /> ###AREALIST###</h3></a>
+    <table cellpadding="0" id="arealist" cellspacing="0" style="border:1px solid #999999; margin:5px 0px 10px 0px; width:100%;">
+      <tr>
+        <td valign="top" style="padding:8px;width:451px;">
+###ITEMS###
+
+<script type="text/javascript">
+function set_areaids()
+{
+	var i = 0;
+	var el = false;
+	var hidden = document.getElementById('areaids');
+	hidden.value = '';
+	while ( ( el = document.getElementById('sel_'+i) ) )
+	{
+		if ( el.checked )
+			hidden.value += (hidden.value?',':'')+el.value;
+		++i;
+	}
+}
+</script>
+
+        <h3 class="uppercase">###SELECTEDAREAS###</h3>
+        <div style="border:1px solid #999999; margin:5px 0px 0px 0px; width:100%;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+          <div style="padding:10px;">
+            <form method="post" action="" style="margin:0px;padding:0px;">
+              <input type="hidden" name="area_page" value="1" />
+              <input type="hidden" name="map_id" value="###MID###" />
+              <input type="hidden" name="action" value="move" />
+              <input type="hidden" id="areaids" name="areaids" value="" />
+              <input type="hidden" name="id" value="###PATHID###" />
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:0px 4px 4px 0px;">###MOVEX###:</td>
+                  <td style="padding:0px 4px 4px 0px;"><input type="text" size="2" name="xmov" /></td>
+                </tr>
+                <tr>
+                  <td>###MOVEY###:</td>
+                  <td><input type="text" size="2" name="ymov" /></td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="padding-top:7px;"><input type="submit" value="###MOVE###" onClick="set_areaids(); return check_chg_vars();" /></td>
+                </tr>
+              </table>
+            </form>
+          </div>
+        </div>
+    </td>
+  </tr>
+</table>
+<script type="Text/Javascript">setLborder('###AID###');</script>
+<!-- ###LIST_PART### -->
+
+<!-- ###LIST_ITEM### -->
+<table id="x_area_###AID###" cellpadding="0" cellspacing="0" style="border:1px solid #999999; margin:5px 0px 10px 0px; width:100%;" onclick="Javascript:goClick(###NUM###,'index.php?area_page=1&area_id=###AID###&map_id=###MID###&id=###PATHID###',0)" onMouseOver="Javascript:tbg_ov2(this,'i_###AID###','###XTYPE###')" onMouseOut="Javascript:tbg_out2(this,'i_###AID###','###XTYPE###')">
+  <tr>
+    <td style="padding:5px;" valign="top">
+		  <form method="post" name="f_###AID###" action="">
+        <input type="hidden" name="area_id" value="###AID###" />
+        <input type="hidden" name="area_page" value="1" />
+        <input type="hidden" name="map_id" value="###MID###" />
+        <input type="hidden" name="action" value="" />
+        <input type="hidden" name="id" value="###PATHID###" />
+        <table style="width:100%;" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="5%" style="padding-bottom:2px;"><input type="checkbox" value="###AID###" id="sel_###NUM###" onclick="Javascript:goClick(0,'#',1)" /></td>
+            <td width="95%" valign="bottom">&nbsp;<a title="###L_TYPE###: ###TYPE###" href="index.php?area_page=1&area_id=###AID###&map_id=###MID###&id=###PATHID###" onClick="return check_chg_vars();"><img src="img/###XTYPE###_1.gif" id="i_###AID###" style="background-color:###FCOLOR###;" alt="###L_TYPE###: ###TYPE###" title="###L_TYPE###: ###TYPE###">&nbsp;<strong>###DESCRIPT###&nbsp;</strong></a><a href="Javascript:document.forms['f_###AID###'].action.value='del';document.forms['f_###AID###'].submit()" onClick="Javascript:goClick(0,'#',1);return check_chg_vars();"><img src="img/garbage.gif" title="###DELETE###" alt="###DELETE###" border="0" /></a></td>
+          </tr>
+          <tr>
+            <td colspan="2"><div style="padding:7px 0px 0px 0px;">###L_LINK###:&nbsp;<a href="###LINK###" target="_blank">###LINK###</a></div></td>
+          </tr>
+        </table>
+      </form>
+		</td>
+  </tr>
+</table>
+<!-- ###LIST_ITEM### -->
+
+<!-- ###IMG_PART### -->
+<script type="text/javascript">
+var tpos      = "u";
+var m_toggle  = new Array();
+m_toggle["u"] = "###TOGGLEU###";
+m_toggle["d"] = "###TOGGLED###";
+</script>
+<div id="mpos" style="border:1px solid #999999; padding:0px; margin:10px 0px;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+  <table cellspacing="0" cellpadding="0" border="0" style="height:30px;">
+    <tr>
+	    <td width="60"><strong>&nbsp;&nbsp;x:&nbsp;</strong></td>
+		  <td width="30">
+		    <div id="xx" style="width:30px;">0</div>
+		  </td>
+		  <td width="60"><strong>&nbsp;&nbsp;y:&nbsp;</strong></td>
+		  <td width="60"><div id="yy">0</div></td>
+			<td style="width:100%">&nbsp;</td>
+			<td style="padding:0px;" onclick="Javascript:togglePos()"><a href="#" onclick="Javascript:togglePos()"><img id="mposimg" src="img/d.gif" border="0" alt="###TOGGLED###" title="###TOGGLED###" /></a></td>
+	  </tr>
+  </table>
+</div>
+<div id="canvas" style="position:relative; top:0px; left:0px; background-image:url(###SRC###); width:###W###px; height:###H###px; border:1px solid #999999;"></div>
+<br />
+<!-- ###IMG_PART### -->
+
+<!-- ###JS_PART### -->
+<script type="text/javascript" src="js/wz_jsgraphics.js"></script>
+<script type="text/javascript" src="js/draw_objects.js"></script>
+<script type="text/javascript" src="colpicker/color_functions.js"></script>
+<script type="text/javascript" src="colpicker/js_color_picker_v2.js"></script>
+<script type="text/javascript">
+
+var wrong_coord = false;
+var wx = 0;
+var wy = 0;
+var wrong_coord1 = false;
+var wx1 = 0;
+var wy1 = 0;
+var wrong_coord2 = false;
+var wx2 = 0;
+var wy2 = 0;
+var moustime = 0;
+var mouseposx = 0;
+var mouseposy = 0;
+var ismousedown = false;
+var ismouseup = false;
+var selectedid = "###AID###";
+var oncl = 'lineclick(';
+var jg = new jsGraphics("canvas");
+var objs = new Object();
+var changes = 0;
+var chg_blink;
+var chg_color;
+var chg_link;
+var chg_descript;
+var chg_param;
+var chg_point = new Array();
+
+###GLOBAL_JS_DRAW###
+
+if ( selectedid ) {
+	init_chg_vars();
+	if ( objs[selectedid] ) { change_blink(); }
+}	
+
+document.getElementById("canvas").onclick = ###IMGONCLICK###;
+document.getElementById("canvas").onmousedown = mousedown;
+document.getElementById("canvas").onmouseup = mouseup;
+document.getElementById("canvas").onmousemove = mousemove;
+
+function mousemove(Event) {
+	var posx = -1;
+	var posy = -1;
+	
+	if ( jg_ie ) {
+		posx += 1;
+		posy += 1;
+	}
+
+	try {
+		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
+		posx += Event.layerX;
+		posy += Event.layerY;
+	} catch(e) {
+		try {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		} catch(e) { alert(e+" Onclick functionality not supported!"); return 1; }
+	}
+
+	if ( wrong_coord2 ) {
+		posx += wx2;
+		posy += wy2;
+		wrong_coord2 = false;
+	}
+	var a = new Date();
+	if ( ismousedown && a.getTime() - mousetime > 50 && selectedid && objs[selectedid] ) {
+		objs[selectedid].drag(mouseposx, mouseposy, posx, posy);
+	}
+	document.getElementById('xx').firstChild.nodeValue = posx;
+	document.getElementById('yy').firstChild.nodeValue = posy;
+}
+
+function mouseup(Event) {
+	ismousedown = false;
+	var posx = -1;
+	var posy = -1;
+	
+	if ( jg_ie ) {
+		posx += 1;
+		posy += 1;
+	}
+
+	try {
+		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
+		posx += Event.layerX;
+		posy += Event.layerY;
+	} catch(e) {
+		try {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		} catch(e) { alert(e+" Onclick functionality not supported!"); return 1; }
+	}
+
+	if ( wrong_coord1 ) {
+		posx += wx1;
+		posy += wy1;
+		wrong_coord1 = false;
+	}
+	var a = new Date();
+	if ( a.getTime() - mousetime > 300 && selectedid && objs[selectedid] ) {
+		objs[selectedid].drag(mouseposx, mouseposy, posx, posy);
+		ismouseup = true;
+	}
+}
+
+function mousedown(Event) {
+	ismousedown = true;
+	mouseposx = -1;
+	mouseposy = -1;
+	
+	if ( jg_ie ) {
+		mouseposx += 1;
+		mouseposy += 1;
+	}
+
+	try {
+		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
+		mouseposx += Event.layerX;
+		mouseposy += Event.layerY;
+	} catch(e) {
+		try {
+			mouseposx += window.event.offsetX;
+			mouseposy += window.event.offsetY;
+		} catch(e) { alert(e+" Onclick functionality not supported!"); return 1; }
+	}
+
+	if ( wrong_coord1 ) {
+		mouseposx += wx1;
+		mouseposy += wy1;
+		wrong_coord = false;
+	}
+	var a = new Date()
+	mousetime = a.getTime();
+}
+
+function mouseline(x,y) {
+	wrong_coord1 = true;
+	wx1 = x;
+	wy1 = y;
+}
+
+function mouseline2(x,y) {
+	wrong_coord2 = true;
+	wx2 = x;
+	wy2 = y;
+}
+
+// If somebody clicks exactly on the line of a object
+function lineclick(x,y) {
+	wrong_coord = true;
+	wx = x;
+	wy = y;
+}
+
+
+function is_a_obj(Event) {
+	if ( ismouseup ) { // we had a mousedrag, do nothin' foolish here ;-)
+		ismouseup = false;
+		return 1;
+	}
+
+	var posx = -1;
+	var posy = -1;
+	
+	if ( jg_ie ) {
+		posx += 1;
+		posy += 1;
+	}
+
+	try {
+		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
+		posx += Event.layerX;
+		posy += Event.layerY;
+	} catch(e) {
+		try {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		} catch(e) { alert(e+" Onclick functionality not supported!"); return 1; }
+	}
+
+	if ( wrong_coord ) {
+		posx += wx;
+		posy += wy;
+		wrong_coord = false;
+	}	
+
+	// Coords within the img?
+	if ( posx > ###W### || posy > ###H### ) { return 1; } // stop caller
+  
+	for ( var i in objs ) {
+		if ( i != selectedid ) {
+			if ( objs[i].is_in_obj(posx, posy) ) {
+				if ( check_chg_vars() ) { edit_obj(i); } 
+        return 1; // stop caller
+			}
+		}
+	}
+	return 0; // the calling eventhandler can proceed
+}
+
+function edit_obj( id ) {
+	window.location.href = "index.php?area_page=1&map_id=###MID###&area_id="+id+"&id=###PATHID###";
+}
+
+function change_blink() {
+	if ( document.getElementById('blink').checked ) { objs[selectedid].make_blink(); }
+	else { objs[selectedid].stop_blink(); }
+}
+
+function change_color() {
+	objs[selectedid].color = document.getElementById('sel_col').options[document.getElementById('sel_col').selectedIndex].value;
+	objs[selectedid].paint();
+  selcol = document.getElementById('sel_col').options[document.getElementById('sel_col').selectedIndex].value;	
+	document.getElementById("area_shape_img").style.backgroundColor = selcol;
+	document.getElementById("i_"+document.getElementById("area_id").value).style.backgroundColor = selcol;
+	if(document.getElementById('sel_col').selectedIndex > (ocols-1)) { document.getElementById('coldel').style.visibility = "visible"; }
+	else { document.getElementById('coldel').style.visibility = "hidden"; }
+	if(document.getElementById('s_bcol').value.length == 0) { document.getElementById('s_bcol').value = selcol; }
+	checkvisible();
+}
+
+function init_chg_vars() {
+  if(document.getElementById('blink')) { chg_blink = document.getElementById('blink').checked; }
+	if(document.getElementById('sel_col')) { chg_color = document.getElementById('sel_col').options[document.getElementById('sel_col').selectedIndex].value; }
+	if(document.getElementById('link')) { chg_link = document.getElementById('link').value; }
+	if(document.getElementById('descript')) { chg_descript = document.getElementById('descript').value; }
+	if(document.getElementById('param')) { chg_param = document.getElementById('param').value; }
+	switch( document.getElementById('type').value ) {
+		case '0': // Rectangle
+		  if(document.getElementById('xsize')) {
+			  chg_point[0] = document.getElementById('xsize').value;
+			  chg_point[1] = document.getElementById('ysize').value;
+			  chg_point[2] = document.getElementById('xpos').value;
+			  chg_point[3] = document.getElementById('ypos').value;
+		  }
+			break;
+		case '1': // Circle
+		  if(document.getElementById('radius')) {
+			  chg_point[0] = document.getElementById('radius').value;
+			  chg_point[1] = document.getElementById('xpos').value;
+			  chg_point[2] = document.getElementById('ypos').value;
+			}
+			break;
+		case '2': // Polygon
+			chg_point[0] = polynum;
+			for ( var i = 1; i <= polynum; ++i ) {
+			  if(document.getElementById('xpos'+i)) {
+				  chg_point[i*2-1] = document.getElementById('xpos'+i).value;
+				  chg_point[i*2] = document.getElementById('ypos'+i).value;
+				}
+			}
+			break;
+	}
+}
+
+function check_chg_vars()
+{
+	if ( ! selectedid /*|| ! objs[selectedid]*/ ) { return true; }
+	var changed = false;
+	var type = document.getElementById('type').value;
+	while ( true ) {
+    if(document.getElementById('blink')) {
+		  if ( chg_blink != document.getElementById('blink').checked ) { changed = true; break; }
+    }
+    if(document.getElementById('sel_col')) {
+		  if ( chg_color != document.getElementById('sel_col').options[document.getElementById('sel_col').selectedIndex].value ) { changed = true; break; }
+    }
+    if(document.getElementById('link')) {
+		  if ( chg_link != document.getElementById('link').value ) {changed = true; break; }
+    }
+    if(document.getElementById('descript')) {
+		  if ( chg_descript != document.getElementById('descript').value ) { changed = true; break; }
+    }
+    if(document.getElementById('param')) {
+		  if ( chg_param != document.getElementById('param').value ) { changed = true; break; }
+    }
+		switch( type ) {
+			case '0': // Rectangle
+        if(document.getElementById('xsize')) {
+				  if ( chg_point[0] != document.getElementById('xsize').value ) { changed = true; }
+				  if ( chg_point[1] != document.getElementById('ysize').value ) { changed = true; }
+				  if ( chg_point[2] != document.getElementById('xpos').value ) { changed = true; }
+				  if ( chg_point[3] != document.getElementById('ypos').value ) { changed = true; }
+        }
+				break;
+			case '1': // Circle
+        if(document.getElementById('radius')) {
+				  if ( chg_point[0] != document.getElementById('radius').value ) { changed = true; }
+				  if ( chg_point[1] != document.getElementById('xpos').value ) { changed = true; }
+				  if ( chg_point[2] != document.getElementById('ypos').value ) { changed = true; }
+        }
+				break;
+			case '2': // Polygon
+				if ( chg_point[0] != akt_polynum ) { changed = true; break; }
+				for ( var i = 1; i <= polynum; ++i ) {
+          if(document.getElementById('xpos'+i)) {
+					  if ( chg_point[i*2-1] != document.getElementById('xpos'+i).value ) { changed = true; break; }
+					  if ( chg_point[i*2] != document.getElementById('ypos'+i).value ) { changed = true; break; }
+          }
+				}
+				break;
+		}
+		break;
+	}
+	if ( changed ) {
+		if ( confirm('###L_DISCARD###') ) { return true; }
+		else { return false; }
+  }
+	return true;
+}
+</script>
+<!-- ###JS_PART### -->
