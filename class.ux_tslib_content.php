@@ -56,7 +56,7 @@
 				  
 					  $area_res = $db->sql_query('SELECT id, type, link, param, description FROM tx_mwimagemap_area WHERE mid = \''.$row[0].'\'');
 				    while ( $area_row = $db->sql_fetch_row( $area_res ) ) {
-					    if(strlen($area_row[3]) == 0 || !eregi('alt=',$area_row[3])) { $area_row[3] .= ' alt="'.$area_row[4].'"'; } // adding default alt-attribute in case of its absence
+					    if(strlen($area_row[3]) == 0 || !preg_match("/alt\=/i", $area_row[3])) { $area_row[3] .= ' alt="'.$area_row[4].'"'; } // adding default alt-attribute in case of its absence
 					    if ( ! ( $point_res = $db->sql_query('SELECT x, y FROM tx_mwimagemap_point WHERE aid = '.$area_row[0].' ORDER BY num') ) ) {
 						    continue;
 					    }
