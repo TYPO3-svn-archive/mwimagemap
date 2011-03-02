@@ -91,7 +91,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 		$markerArray['###ROIMAGES###'] = '';
 		while ( $area_row = $db->sql_fetch_row( $area_res ) ) {
 		  if($this->title == 1) {
-			  if(!eregi("title=",$area_row[3]) && !eregi("title =",$area_row[3])) { $area_row[3] .= ' title="'.$area_row[4].'" '; }
+			  if(!preg_match("/title\=/i", $area_row[3]) && !preg_match("/title \=/i", $area_row[3])) { $area_row[3] .= ' title="'.$area_row[4].'" '; }
 			}
 		
 		  if(intval($area_row[5]) == 2) {
@@ -114,11 +114,11 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 					}
 					$romout = 'onmouseout="Javascript:document.getElementById(\'tx_mwimagemap_img_'.$this->cObj->data['uid'].'\').src = \''.$xmap.'\';';
 					
-					if(eregi("onmouseover",$area_row[3])) {
+					if(preg_match("/onmouseover/i", $area_row[3])) {
 					  $aparams = explode (" ",$area_row[3]);
 						$i=0;
 						while($i<count($aparams)) {
-						  if (eregi("onmouseover",$aparams[$i])) {
+						  if (preg_match("/onmouseover/i", $aparams[$i])) {
                 $aparams[$i] = $this->correctParams('onmouseover',$aparams[$i]);
 								$aparams[$i] = $romov.$aparams[$i].'"';
 								break;
@@ -127,11 +127,11 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 						}
 						$area_row[3] = join(' ',$aparams);
 					}
-					else if(eregi("onmouseout",$area_row[3])) {
+					else if(preg_match("/onmouseout/i", $area_row[3])) {
 					  $aparams = explode (" ",$area_row[3]);
 						$i=0;
 						while($i<count($aparams)) {
-						  if (eregi("onmouseout",$aparams[$i])) {
+						  if (preg_match("/onmouseout/i", $aparams[$i])) {
                 $aparams[$i] = $this->correctParams('onmouseout',$aparams[$i]);
 								$aparams[$i] = $romout.$aparams[$i].'"';
 								break;
@@ -147,8 +147,8 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 		  if($area_row[5] == 1 || $area_row[5] == 2) {
 			  $borderoptions[] = array($area_row[0],$area_row[5],$area_row[6],$area_row[7],$area_row[8]);
 			}
-		  
-			if(strlen($area_row[3]) == 0 || !eregi('alt=',$area_row[3])) { $area_row[3] .= ' alt="'.$area_row[4].'"'; } // adding default alt-attribute in case of its absence
+
+			if(strlen($area_row[3]) == 0 || !preg_match("/alt\=/i", $area_row[3])) { $area_row[3] .= ' alt="'.$area_row[4].'"'; } // adding default alt-attribute in case of its absence
 			if ( ! ( $point_res = $db->sql_query('SELECT x, y FROM tx_mwimagemap_point WHERE aid = '.$area_row[0].' ORDER BY num') ) ) { continue; }
 
 			$link = $this->create_link_from_browser( $area_row[2] );
@@ -214,6 +214,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 				if ( $url[2] < 1 || $url[3] < 1 ) { $url[2] = $url[3] = ''; }
 			}
 			else {
+				$linkparams = explode(' ',$txt);
 				$url[1] = substr($txt, $pos + 1);
 				$url[2] = '';
 				$url[3] = '';
@@ -228,7 +229,11 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 			}
 			$ret = 'href=\'Javascript:var a = new function() { window.open("'.$url[0].'", "'.$url[1].'", "width='.$url[2].',height='.$url[3].'"); }\'';
 		}
-		else { $ret = 'href="'.$url[0].'"'.($url[1]?' target="'.$url[1].'"':''); }
+		else { 
+			$ret = 'href="'.$url[0].'"';
+			if (trim($linkparams[1]) != '-') { $ret .= ' target="'.$linkparams[1].'"';}
+			if (trim($linkparams[2]) != '-') { $ret .= ' class="'.$linkparams[2].'"';}
+		}
 
 		return $ret;
 	}
@@ -247,8 +252,6 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 		return $pstring;
 	}
 }
-
-
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mwimagemap/pi1/class.tx_mwimagemap_pi1.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mwimagemap/pi1/class.tx_mwimagemap_pi1.php']);

@@ -2,7 +2,7 @@
 /***************************************************************
 *	Copyright notice
 *
-*	(c) 2007,2008 Michael Perlbach (info@metaways.de)
+*	(c) 2007,2011 Michael Perlbach (info@metaways.de)
 *	All rights reserved
 *
 *	This script is part of the TYPO3 project. The TYPO3 project is
@@ -172,7 +172,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 		$img_data = getimagesize ( PATH_site . $path . $filename );
 		$width		= $img_data['0'];
 		$height	 = $img_data['1'];
-
+		
 		if ($width >= $height) { $ratio = $width/100; }
 		else { $ratio = $height/100; }
 		$new_width	= ceil($width/$ratio);
@@ -250,6 +250,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 						unlink($_FILES['usr_file']['tmp_name']);
 						break;
 					}
+					if ( is_file(PATH_site . $path . $file) ) { t3lib_div::fixPermissions(PATH_site . $path . $file); }
 					$new_file = true;
 				}
 				elseif ( t3lib_div::_GP('use_pic') ) {
@@ -348,7 +349,6 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 
 			case 'chg_name':
 				$file = '';
-				$content .= $_FILES['usr_file']['tmp_name'].'<br />';
 				if ( is_uploaded_file($_FILES['usr_file']['tmp_name']) ) {
 					if ( ! $_FILES['usr_file']['name'] || $_FILES['usr_file']['error'] ) {
 						if ( $_FILES['usr_file']['tmp_name'] ) { unlink( $_FILES['usr_file']['tmp_name'] ); }
@@ -387,6 +387,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 						unlink($_FILES['usr_file']['tmp_name']);
 						break;
 					}
+					if ( is_file(PATH_site . $path . $afile) ) { t3lib_div::fixPermissions(PATH_site . $path . $afile); }
 					$file = $afile;
 				}
 				$name = trim(t3lib_div::_GP('name'));
@@ -614,8 +615,8 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				$fe_bcol = t3lib_div::_GP('fe_bcol');
 				$fe_bths = t3lib_div::_GP('fe_borderthickness');
 				if(t3lib_div::_GP('fe_visible') == 1 || t3lib_div::_GP('fe_visible') == 2) {
-					if (!eregi("^#[a-f0-9]{6}$", $fe_bcol)) { $fe_bcol = t3lib_div::_GP('color'); }
-					if(!ereg ("^[-]?[0-9]+([\.][0-9]+)?$", $fe_bths)) { $fe_bths = '1'; }
+					if (!preg_match("/^#[a-f0-9]{6}$/i", $fe_bcol) ) { $fe_bcol = t3lib_div::_GP('color'); }
+					if(!preg_match("/^[-]?[0-9]+([\.][0-9]+)?$/i", $fe_bths)) { $fe_bths = '1'; }
 				}
 				
 				if ( ! $db->exec_UPDATEquery( 'tx_mwimagemap_area', 'id = '.$area_id,
@@ -1075,7 +1076,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				$sel = ($carr[0] == $color) ? ' selected' : '';
 				$colname = $carr[0];
 				for($j=0;$j<count($carr2);$j++) {
-					if(ereg($LANG->lang.':',$carr2[$j])) { $colname = str_replace($LANG->lang.':','',$carr2[$j]); }
+					if(preg_match("/".$LANG->lang."\:/i", $carr2[$j])) { $colname = str_replace($LANG->lang.':','',$carr2[$j]); }
 				}
 				$coloptions .= '<option value="'.$carr[0].'" '.$sel.'>'.$colname.'</option>'."\n";
 				$ocols++;
@@ -1332,7 +1333,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 					case 1:
 						$simg = $pic;
 						if (!file_exists($pic)) { $simg = ' '.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png -resize '.$imgsize[0].'!x'.$imgsize[1].'!'; }
-						if(ereg('.gif',$pic)) { $simg = str_replace('canvas.png','canvas.gif',$simg); }
+						if(preg_match("/\.gif/i", $pic)) { $simg = str_replace('canvas.png','canvas.gif',$simg); }
 						switch( intval($row[4]) ) {
 							
 							// Rectangle
@@ -1367,7 +1368,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 						
 						if(is_file($pic)) {
 							if(is_file($oldimg)) { unlink($oldimg); }
-							if(ereg('.png',$simg)) { $db->exec_UPDATEquery( 'tx_mwimagemap_map', 'id = '.$mid, array( 'alt_file' => $af ) ); }
+							if(preg_match("/\.png/i", $simg) ) { $db->exec_UPDATEquery( 'tx_mwimagemap_map', 'id = '.$mid, array( 'alt_file' => $af ) ); }
 						}
 						else {
 							if(is_file($oldimg)) { unlink($oldimg); }
@@ -1390,9 +1391,9 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				$ypic = PATH_site.'uploads/tx_mwimagemap/'.$row[0].'_'.$af;
 				$timg = $xpic;
 				if (!file_exists($xpic)) { $timg = ' '.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png -resize '.$imgsize[0].'!x'.$imgsize[1].'!'; }
-				if(ereg('.gif',$ypic)) { $timg = str_replace('canvas.png','canvas.gif',$timg); }
+				if(preg_match("/\.gif/i",$ypic)) { $timg = str_replace('canvas.png','canvas.gif',$timg); }
 				$oldimg = PATH_site.'uploads/tx_mwimagemap/'.$row[5];
-				if(ereg('.gif',$af)) { $oldimg = str_replace('.png','.gif',$oldimg); }
+				if(preg_match("/\.gif/i",$af)) { $oldimg = str_replace('.png','.gif',$oldimg); }
 				$adata = $db->exec_SELECTquery('x, y', 'tx_mwimagemap_point', 'aid = '.$row[0], '', 'num');
 				
 				// Converting the hex value of a color to rgb;
@@ -1410,7 +1411,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 						
 	 					if(is_file($ypic)) {
 							if(is_file($oldimg)) { unlink($oldimg); }
-							if(ereg('.png',$ypic)) {
+							if(preg_match("/\.png/i", $ypic)) {
 								$db->exec_UPDATEquery( 'tx_mwimagemap_area', 'id = '.$row[0], array( 'fe_altfile' => $row[0].'_'.$af ) );
 							}
 						}
@@ -1428,7 +1429,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 								
 	 					if(is_file($ypic)) {
 							if(is_file($oldimg)) { unlink($oldimg); }
-							if(ereg('.png',$ypic)) {
+							if(preg_match("/\.png/i", $ypic)) {
 								$db->exec_UPDATEquery( 'tx_mwimagemap_area', 'id = '.$row[0], array( 'fe_altfile' => $row[0].'_'.$af ) );
 							}
 						}
@@ -1445,7 +1446,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 								
 	 					if(is_file($ypic)) {
 							if(is_file($oldimg)) { unlink($oldimg); }
-							if(ereg('.png',$ypic)) {
+							if(preg_match("/\.png/i", $ypic)) {
 								$db->exec_UPDATEquery( 'tx_mwimagemap_area', 'id = '.$row[0], array( 'fe_altfile' => $row[0].'_'.$af ) );
 							}
 						}
@@ -1500,6 +1501,17 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
       $tce->clear_cacheCmd('all');
     }
   }
+	
+function leading_zero( $aNumber, $intPart, $floatPart=NULL, $dec_point=NULL, $thousands_sep=NULL) {        //Note: The $thousands_sep has no real function because it will be "disturbed" by plain leading zeros -> the main goal of the function
+  $formattedNumber = $aNumber;
+  if (!is_null($floatPart)) {    //without 3rd parameters the "float part" of the float shouldn't be touched
+    $formattedNumber = number_format($formattedNumber, $floatPart, $dec_point, $thousands_sep);
+    }
+  //if ($intPart > floor(log10($formattedNumber)))
+    $formattedNumber = str_repeat("0",($intPart + -1 - floor(log10($formattedNumber)))).$formattedNumber;
+  return $formattedNumber;
+  }
+	
 }
 
 // Make instance:
