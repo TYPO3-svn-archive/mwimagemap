@@ -115,7 +115,7 @@ function mkDiv(x, y, w, h)
 function mkDivIe(x, y, w, h)
 {
 	//this.htm += '%%'+this.color+';'+x+';'+y+';'+w+';'+h+';'+x+','+y+');';
-	this.htm = '%%'+this.color';'+x+'px;'+y+'px;'+w+'px;'+h+'px;'+x+','+y+');'; //added units to the values so that it also works correctly in IE8 
+	this.htm += '%%'+this.color+';'+x+'px;'+y+'px;'+w+'px;'+h+'px;'+x+','+y+');'; //added units to the values so that it also works correctly in IE8 
 }
 
 
