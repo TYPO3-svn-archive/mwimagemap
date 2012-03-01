@@ -2,7 +2,7 @@
 /***************************************************************
 *	Copyright notice
 *
-*	(c) 2007,2011 Michael Perlbach (info@metaways.de)
+*	(c) 2007,2012 Michael Perlbach (info@mikelmade.de)
 *	All rights reserved
 *
 *	This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,7 +24,7 @@
 /**
  * Module 'mw_imagemap' for the 'mwimagemap' extension.
  *
- * @author	Michael Perlbach <info@metaways.de>
+ * @author	Michael Perlbach <info@mikelmade.de>
  */
  
 session_start();
@@ -108,9 +108,9 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mwimagemap']);
 		
+		$this->transparent = '';
 		$this->impath = $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_path'];
 		if($GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] == 'gm') { $this->impath .= 'gm '; }
-		
 		$path = substr(t3lib_div::_GP('id'), strlen(PATH_site));
 
 				// Draw the header.
@@ -140,7 +140,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				t3lib_div::mkdir(PATH_site.'typo3temp/tx_mwimagemap/');
 			}
 
-			$headerSection = $this->doc->getHeader("pages",$this->pageinfo,$this->pageinfo["_thePath"])."<br>".$LANG->sL("LLL:EXT:lang/locallang_core.php:labels.path").": ".t3lib_div::fixed_lgd_pre($path,50);
+			$headerSection = $this->doc->getHeader("pages",$this->pageinfo,$this->pageinfo["_thePath"])."<br>".$LANG->sL("LLL:EXT:lang/locallang_core.php:labels.path").": ".t3lib_div::fixed_lgd_cs($path,50);
 			
 			$this->content.=$this->doc->startPage($LANG->getLL("title"));
 			$this->content.=$this->doc->header($LANG->getLL("title"));
@@ -169,6 +169,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 	}
 
 	function create_thumb($filename, $path) {
+		
 		$img_data = getimagesize ( PATH_site . $path . $filename );
 		$width		= $img_data['0'];
 		$height	 = $img_data['1'];
@@ -178,7 +179,10 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 		$new_width	= ceil($width/$ratio);
 		$new_height = ceil($height/$ratio);
 		$new_path	 = PATH_site.'typo3temp/tx_mwimagemap/'.md5($path.$filename);
-		exec($this->impath.'convert -resize '.$new_width.'!x'.$new_height.'! -quality 100 -unsharp 1.5x1.2+1.0+0.10 '.PATH_site.$path.$filename.' '.$new_path.'.jpg');
+		
+		if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -resize '.$new_width.'!x'.$new_height.'! -quality 100 -unsharp 1.5x1.2+1.0+0.10 "'.PATH_site.$path.$filename.'" "'.$new_path.'.jpg"'); }
+		else { exec($this->impath.'convert -resize '.$new_width.'!x'.$new_height.'! -quality 100 -unsharp 1.5x1.2+1.0+0.10 '.PATH_site.$path.$filename.' '.$new_path.'.jpg'); }
+		
 		rename($new_path.'.jpg',$new_path);
 	}
 
@@ -344,7 +348,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				}
 
 				if ( ! $db->exec_DELETEquery('tx_mwimagemap_map', 'id = '.intval(t3lib_div::_GP('map_id'))) ) { $content .= 'sql_error:'.$db->sql_error().'<br />'; }
-        $this -> checkFecache();
+				$this -> checkFecache();
 			break;
 
 			case 'chg_name':
@@ -428,7 +432,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 					}
 				}
 				$this->createFePics(intval(t3lib_div::_GP('map_id')),0);
-        $this -> checkFecache();
+				$this -> checkFecache();
 				break;
 			}
 
@@ -580,7 +584,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 					default:
 					break;
 				}
-        $this -> checkFecache();
+				$this -> checkFecache();
 			break;
 
 			case 'del':
@@ -589,8 +593,8 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 					break;
 				}
 				if ( ! $db->exec_DELETEquery('tx_mwimagemap_point', 'aid = ' . $area_id) ) { $this->err .= 'delpoint sql_error: '.$db->sql_error(); }
-        $this -> checkFecache();
-      break;
+				$this -> checkFecache();
+			break;
 
 			case 'edit':
 				$_SESSION['mwim_blink'] = intval(t3lib_div::_GP('blink'));
@@ -651,14 +655,14 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 					break;
 				}
 				$this->createFePics($map_id,$area_id);
-        $this -> checkFecache();        
+				$this -> checkFecache();				
 			break;
 
 			case 'move':
 				$x = intval(trim(t3lib_div::_GP('xmov')));
 				$y = intval(trim(t3lib_div::_GP('ymov')));
 				if ( !$x && !$y ) { break; }
-				$arr = split(',', t3lib_div::_GP('areaids'));
+				$arr = explode(',', t3lib_div::_GP('areaids'));
 				foreach( $arr as $val ) {
 					if ( ! ( $res = $db->exec_SELECTquery('type', 'tx_mwimagemap_area', 'id = '.$val) ) ) {
 						$this->err .= 'exec_select sql_error: '.$db->sql_error().'<br />';
@@ -680,7 +684,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 					}
 				}
 				$this->createFePics($map_id,$val);
-        $this -> checkFecache();
+				$this -> checkFecache();
 			break;
 		}
 
@@ -1160,21 +1164,21 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 			$this->err .= 'write_edit_rect: num_rows() == '.$db->sql_num_rows($res).'<br />';
 			return '';
 		}
-   
-    $r = 0;
-    $x = 0;
-    $y = 0;
-    $c = 0;
+	 
+		$r = 0;
+		$x = 0;
+		$y = 0;
+		$c = 0;
 
-    while ( $row = $db->sql_fetch_row($res) ) {
-      if($c == 0) { $r = $row[0]; }
-      else {
-        $x = $row[0];
-        $y = $row[1];
-      }
-      $c++;
-    }
-    
+		while ( $row = $db->sql_fetch_row($res) ) {
+			if($c == 0) { $r = $row[0]; }
+			else {
+				$x = $row[0];
+				$y = $row[1];
+			}
+			$c++;
+		}
+		
 		$mA['###AID###'] = $aid;
 		$mA['###L_RADIUS###'] = 'Radius';
 		$mA['###L_XPOS###'] = $LANG->getLL('X Pos');
@@ -1314,7 +1318,6 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 		
 		if($this -> makeFePics($apic2, $af2, $mid, $img, $ext, $imgsize, $oldimg2)) {
 			$this -> makeFePics($apic1, $af1, $mid, $img, $ext, $imgsize, $oldimg1);
-			#$this -> makeFePics($apic2, $af2, $mid, $img, $ext, $imgsize, $oldimg2);
 		}
 	}
 	
@@ -1332,37 +1335,49 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				switch( intval($row[1]) ) {
 					case 1:
 						$simg = $pic;
-						if (!file_exists($pic)) { $simg = ' '.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png -resize '.$imgsize[0].'!x'.$imgsize[1].'!'; }
+						if (!file_exists($pic)) {
+							$simg = ' '.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png -resize '.$imgsize[0].'!x'.$imgsize[1].'!';
+							if(preg_match("/WIN/",PHP_OS)) { $simg = ' "'.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png" -resize '.$imgsize[0].'!x'.$imgsize[1].'!'; }
+						}
 						if(preg_match("/\.gif/i", $pic)) { $simg = str_replace('canvas.png','canvas.gif',$simg); }
 						switch( intval($row[4]) ) {
 							
 							// Rectangle
 							case 0:
+								if(preg_match("/WIN/",PHP_OS) && !preg_match("/\"/",$simg)) { $simg = '"'.$simg.'"'; }
 								$points = array();
 								while ( $row2 = $db->sql_fetch_row($adata) ) {
 									$points[] = $row2[0];
 									$points[] = $row2[1];
 								}
-								exec($this->impath.'convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$pic);
+								
+								if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" "'.$pic.'"'); }
+								else { exec($this->impath.'convert -quality 100 "'.$simg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$pic); }
 							break;
 								
 							// Circle
 							case 1:
+								if(preg_match("/WIN/",PHP_OS) && !preg_match("/\"/",$simg)) { $simg = '"'.$simg.'"'; }
 								$points = array();
 								while ( $row2 = $db->sql_fetch_row($adata) ) {
 									$points[] = $row2[0];
 									$points[] = $row2[1];
 								}
-								exec($this->impath.'convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$pic);
+								
+								if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" "'.$pic.'"'); }
+								else { exec($this->impath.'convert -quality 100 "'.$simg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$pic); }
 							break;
 								
 							// Polygon
 							case 2:
+								if(preg_match("/WIN/",PHP_OS) && !preg_match("/\"/",$simg)) { $simg = '"'.$simg.'"'; }
 								$points = '';
 								while ( $row2 = $db->sql_fetch_row($adata) ) {
 									$points .= (strlen($points) == 0) ? $row2[0].','.$row2[1] : ','.$row2[0].','.$row2[1];
 								}
-								exec($this->impath.'convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" '.$pic);
+								
+								if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" "'.$pic.'"'); }
+								else { exec($this->impath.'convert -quality 100 "'.$simg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" '.$pic); }
 							break;
 						}
 						
@@ -1390,7 +1405,10 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				$xpic = $pic;
 				$ypic = PATH_site.'uploads/tx_mwimagemap/'.$row[0].'_'.$af;
 				$timg = $xpic;
-				if (!file_exists($xpic)) { $timg = ' '.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png -resize '.$imgsize[0].'!x'.$imgsize[1].'!'; }
+				if (!file_exists($xpic)) {
+					$timg = ' '.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png -resize '.$imgsize[0].'!x'.$imgsize[1].'!';
+					if(preg_match("/WIN/",PHP_OS)) { $timg = ' "'.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png" -resize '.$imgsize[0].'!x'.$imgsize[1].'!'; }
+				}
 				if(preg_match("/\.gif/i",$ypic)) { $timg = str_replace('canvas.png','canvas.gif',$timg); }
 				$oldimg = PATH_site.'uploads/tx_mwimagemap/'.$row[5];
 				if(preg_match("/\.gif/i",$af)) { $oldimg = str_replace('.png','.gif',$oldimg); }
@@ -1402,12 +1420,15 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 
 					// Rectangle
 					case 0:
+						if(preg_match("/WIN/",PHP_OS) && !preg_match("/\"/",$timg)) { $timg = '"'.$timg.'"'; }
 						$points = array();
 						while ( $row2 = $db->sql_fetch_row($adata) ) {
 							$points[] = $row2[0];
 							$points[] = $row2[1];
 						}
-						exec($this->impath.'convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$ypic);
+						
+						if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" "'.$ypic.'"'); }
+						else { exec($this->impath.'convert -quality 100 "'.$timg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$ypic); }
 						
 	 					if(is_file($ypic)) {
 							if(is_file($oldimg)) { unlink($oldimg); }
@@ -1420,12 +1441,15 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 								
 					// Circle
 					case 1:
+						if(preg_match("/WIN/",PHP_OS) && !preg_match("/\"/",$timg)) { $timg = '"'.$timg.'"'; }
 						$points = array();
 						while ( $row2 = $db->sql_fetch_row($adata) ) {
 							$points[] = $row2[0];
 							$points[] = $row2[1];
 						}
-						exec($this->impath.'convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$ypic);
+						
+						if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" "'.$ypic.'"'); }
+						else { exec($this->impath.'convert -quality 100 "'.$timg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$ypic); }
 								
 	 					if(is_file($ypic)) {
 							if(is_file($oldimg)) { unlink($oldimg); }
@@ -1438,11 +1462,14 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 								
 					// Polygon
 					case 2:
+						if(preg_match("/WIN/",PHP_OS) && !preg_match("/\"/",$timg)) { $timg = '"'.$timg.'"'; }
 						$points = '';
 						while ( $row2 = $db->sql_fetch_row($adata) ) {
 							$points .= (strlen($points) == 0) ? $row2[0].','.$row2[1] : ','.$row2[0].','.$row2[1];
 						}
-						exec($this->impath.'convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" '.$ypic);
+							
+						if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" "'.$ypic.'"'); }
+						else { exec($this->impath.'convert -quality 100 "'.$timg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" '.$ypic); }
 								
 	 					if(is_file($ypic)) {
 							if(is_file($oldimg)) { unlink($oldimg); }
@@ -1493,27 +1520,25 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 			}
 		}
 	}
-  
-  function checkFecache() {
-    if($this->extConf['fe_clearpagecache'] == '1') {
-      $tce = t3lib_div::makeInstance('t3lib_TCEmain');
-      $tce->start(Array(),Array());
-      $tce->clear_cacheCmd('all');
-    }
-  }
 	
-function leading_zero( $aNumber, $intPart, $floatPart=NULL, $dec_point=NULL, $thousands_sep=NULL) {        //Note: The $thousands_sep has no real function because it will be "disturbed" by plain leading zeros -> the main goal of the function
-  $formattedNumber = $aNumber;
-  if (!is_null($floatPart)) {    //without 3rd parameters the "float part" of the float shouldn't be touched
-    $formattedNumber = number_format($formattedNumber, $floatPart, $dec_point, $thousands_sep);
-    }
-  //if ($intPart > floor(log10($formattedNumber)))
-    $formattedNumber = str_repeat("0",($intPart + -1 - floor(log10($formattedNumber)))).$formattedNumber;
-  return $formattedNumber;
-  }
+	function checkFecache() {
+		if($this->extConf['fe_clearpagecache'] == '1') {
+			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+			$tce->start(Array(),Array());
+			$tce->clear_cacheCmd('all');
+		}
+	}
 	
+	function leading_zero( $aNumber, $intPart, $floatPart=NULL, $dec_point=NULL, $thousands_sep=NULL) { //Note: The $thousands_sep has no real function because it will be "disturbed" by plain leading zeros -> the main goal of the function
+		$formattedNumber = $aNumber;
+		if (!is_null($floatPart)) {		//without 3rd parameters the "float part" of the float shouldn't be touched
+			$formattedNumber = number_format($formattedNumber, $floatPart, $dec_point, $thousands_sep);
+		}
+		$formattedNumber = str_repeat("0",($intPart + -1 - floor(log10($formattedNumber)))).$formattedNumber;
+		return $formattedNumber;
+	}
 }
-
+	
 // Make instance:
 $SOBE = t3lib_div::makeInstance('tx_mwimagemap_module1');
 $SOBE->init();

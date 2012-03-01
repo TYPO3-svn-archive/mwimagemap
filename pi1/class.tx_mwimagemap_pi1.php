@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007,2008 Michael Perlbach (typo3@metaways.de)
+*  (c) 2007,2012 Michael Perlbach (info@mikelmade.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,7 +24,7 @@
 /**
  * Plugin 'Image Map' for the 'mwimagemap' extension.
  *
- * @author	Michael Perlbach <typo3@metaways.de>
+ * @author	Michael Perlbach <info@mikelmade.de>
  */
 
 require_once(PATH_tslib.'class.tslib_pibase.php');
@@ -170,8 +170,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 			  break;
 			
 			  case MWIM_POLYGON:
-			    // polygon with less than 3 points doesnt make much sense!
-				  if ( $db->sql_num_rows( $point_res ) < 3 ) { continue; }
+				  if ( $db->sql_num_rows( $point_res ) < 3 ) { continue; } // polygon with less than 3 points doesnt make much sense!
 				  $markerArray['###AREAS###'] .= '<area shape="poly" '.$area_row[3].' coords="';
 				  $i = 0;
 				  while ( $row = $db->sql_fetch_row($point_res) ) {

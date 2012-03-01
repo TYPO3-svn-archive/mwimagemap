@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005  ()
+*  (c) 2012 Michael Perlbach  (info@mikelmade.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,7 +24,7 @@
 /**
  * Class that adds the wizard icon.
  *
- * @author	 <>
+ * @author	Michael Perlbach <info@mikelmade.de>
  */
 
 class tx_mwimagemap_pi1_wizicon {
