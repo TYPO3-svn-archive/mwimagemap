@@ -3,7 +3,7 @@
 var showoptions = '###L_SHOWOPTIONS###';
 var hideoptions = '###L_HIDEOPTIONS###';
 </script>
-
+<div id="xcontent" name="xcontent">
 <form name="edit_form" id="edit_form" action="" method="post" style="padding:0px;margin:0px;">
   <input type="hidden" name="area_page" value="1" />
 	<input type="hidden" id="area_id" name="area_id" value="###AID###" />
@@ -44,6 +44,7 @@ var hideoptions = '###L_HIDEOPTIONS###';
 		</tr>
 	</table>
 </form>
+</div>
 <!-- ###EDIT_PART### -->
 
 <!-- ###FE_PART### -->
@@ -76,7 +77,65 @@ var hideoptions = '###L_HIDEOPTIONS###';
 		<td style="padding:5px;width:100%;" colspan="2"><input type="text" id="fe_borderthickness" name="fe_borderthickness" value="###BT###" maxlength="2" style="width:30px;" /></td>
 	</tr>
 </table>
+<input type="hidden" id="s_bcol" value="###FE_BCOL###" />
+<input type="hidden" id="s_bthc" value="###BT###" />
+<a href="Javascript:a_toggle('cbox');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="cboxtoggle" alt="###L_HIDEOPTIONS###" title="###L_SHOWOPTIONS###" /> ###CONTENT_BOX###</h3></a>
+<table id="cbox" style="border:1px solid #999999;width:100%;" onMouseOver="Javascript:tbg_ov(this)" onMouseOut="Javascript:tbg_out(this)">
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;"><div id="cbwarning" style="float:left;margin-right:7px;display:###L_CBWARNING_DISPLAY###;"><img src="../../../../typo3/gfx/warning.png" alt="" title="###CB_WARNING###" /></div>###L_CB_ID###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2">
+		<div id="cbtext" style="float:left;width:180px;overflow:hidden;border:1px solid #999999;background-color:#FFFFFF;display:###L_CB_DISPLAY###;margin-right:7px;" title="###L_CB_TEXT###">###L_CB_TEXT###</div>
+		<div id="cbdel" style="float:left;margin-right:7px;display:###L_CB_DISPLAY###;"><a href="Javascript:delcbid()"><img src="../../../../typo3/gfx/close_gray.gif" alt="" title="###DEL_ELEMENT###" /></a></div>
+		<input type="hidden" id="cbid" name="cbid" value="###CBCID###" />
+		<a href="#" onclick="this.blur(); vHWin=window.open('../../../../typo3/browser.php?mode=db&bparams=cbid|||tt_content,tt_news|','','height=500,width=700,status=0,menubar=0,scrollbars=1');vHWin.focus();return false;"><img src="../../../../typo3/gfx/fileicons/folder.gif" alt="" title="###ADD_ELEMENT###" /></a>
+		</td>
+	</tr>
+
+
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_CB_ACTIVE###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2"><input type="checkbox" id="cb_active" name="cb_active" value="1" ###CHECK_CB_ACTIVE### onclick="checkcbactive()" /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_CB_WIDTH###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2"><input type="text" id="cb_width" name="cb_width" value="###CBW###" maxlength="4" style="width:30px;" /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_CB_HEIGHT###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2"><input type="text" id="cb_height" name="cb_height" value="###CBH###" maxlength="4" style="width:30px;" /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_CB_X###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2"><input type="text" id="cb_x" name="cb_x" value="###CBX###" maxlength="4" style="width:30px;" /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_CB_Y###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2"><input type="text" id="cb_x" name="cb_y" value="###CBY###" maxlength="4" style="width:30px;" /></td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_FE_BORDERCOLOR###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2">
+      <input type="text" id="cb_bcol" name="cb_bcol" value="###CB_BCOL###" style="width:70px;" maxlength="7" />
+      <input type="button" id="cb_bcol_but" value="" style="background-color:###CB_BCOL###;border:1px solid #000000;width:16px;height:16px;" onClick="showColorPicker(this,document.getElementById('cb_bcol'),'cb_bcol_but',1)"/>
+		</td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_FE_BGCOLOR###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2">
+      <input type="text" id="cb_bgcol" name="cb_bgcol" value="###CB_BGCOL###" style="width:70px;" maxlength="7" />
+      <input type="button" id="cb_bgcol_but" value="" style="background-color:###CB_BGCOL###;border:1px solid #000000;width:16px;height:16px;" onClick="showColorPicker(this,document.getElementById('cb_bgcol'),'cb_bgcol_but',1)"/>
+		</td>
+	</tr>
+	<tr>
+	  <td style="padding:5px;white-space:nowrap;">###L_FE_BORDERTHICKNESS###:&nbsp;</td>
+		<td style="padding:5px;width:100%;" colspan="2"><input type="text" id="cb_borderthickness" name="cb_borderthickness" value="###CBT###" maxlength="2" style="width:30px;" /></td>
+	</tr>
+</table>
 <!-- ###FE_PART### -->
+
+
+
+
 
 <!-- ###FRAME_PART### -->
 				<a href="Javascript:a_toggle('frame');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="frametoggle" alt="###L_SHOWOPTIONS###" title="###L_SHOWOPTIONS###" /> ###L_BORDER###</h3></a>

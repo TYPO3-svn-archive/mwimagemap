@@ -64,3 +64,21 @@ CREATE TABLE tt_content (
   	tx_mwimagemap varchar(255) NOT NULL DEFAULT ''
 );
 
+#
+# Table structure for table 'tx_mwimagemap_contentpopup'
+#
+CREATE TABLE tx_mwimagemap_contentpopup (
+	id int(11) NOT NULL auto_increment,
+	aid int(11) NOT NULL DEFAULT '0',
+  content_id int(11) NOT NULL DEFAULT '0',
+  popup_width int(11) NOT NULL DEFAULT '0',
+  popup_height int(11) NOT NULL DEFAULT '0',
+  popup_x int(11) NOT NULL DEFAULT '0',
+  popup_y int(11) NOT NULL DEFAULT '0',
+  popup_bordercolor varchar(8) NOT NULL DEFAULT '',
+  popup_backgroundcolor varchar(8) NOT NULL DEFAULT '',
+  popup_borderwidth int(11) NOT NULL DEFAULT '0',
+  active tinyint(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY (id),
+	KEY parent (aid)
+);

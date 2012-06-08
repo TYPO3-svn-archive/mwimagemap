@@ -6,6 +6,8 @@ $tx_mwimagemap_extconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf
 include_once(t3lib_extMgm::extPath($_EXTKEY)."class.tx_mwimagemap_ufunc.php");
 include_once(t3lib_extMgm::extPath($_EXTKEY)."class.tx_mwimagemap.php");
 
+t3lib_extMgm::addStaticFile($_EXTKEY, 'static/pi1/', 'MW Imagemap');
+
 t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key,pages,recursive';
 
@@ -45,7 +47,6 @@ end($TCA["tt_content"]["palettes"]);
 $p_key = key($TCA["tt_content"]["palettes"]);
 t3lib_extMgm::addToAllTCAtypes('tt_content','--palette--;LLL:EXT:mwimagemap/locallang_db.php:tx_mwimagemap;'.$p_key,'textpic,image');
 }
-t3lib_extMgm::addStaticFile($_EXTKEY,"pi1/static/","Image Map");
 
 // --------------------------------------------
 // Flexform for directly inserting the plugin. 

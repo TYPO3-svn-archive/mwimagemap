@@ -88,6 +88,7 @@
 			<label index="fe_visible">border always visible in frontend</label>
 			<label index="fe_mouseover">border only visible on mouseover</label>
 			<label index="fe_bordercolor">border color in frontend</label>
+			<label index="fe_bgcolor">background color in frontend</label>
 			<label index="fe_borderthickness">border thickness in frontend(px)</label>
 			<label index="fe_options">frontend options</label>
 			<label index="show options">show options</label>
@@ -106,6 +107,13 @@
 			<label index="erroc">An error occured:</label>
 			<label index="contaction">Do you wish to continue with your action?</label>
 			<label index="polyclick">Add points when clicking on the image</label>
+			<label index="contentbox">Content Box</label>
+			<label index="contentboxid">Content Element</label>
+			<label index="contentboxactivated">Content Box active</label>
+			<label index="browseforelements">Browse for records</label>
+			<label index="delelement">Remove item</label>
+			<label index="elementhidden">Item is hidden</label>
+			<label index="elementdeleted">Item is deleted</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="mlang_tabs_tab">mw_imagemap</label>
@@ -189,6 +197,7 @@
 			<label index="fe_hidden">Rahmen im Frontend nicht sichtbar</label>
 			<label index="fe_visible">Rahmen immer im Frontend sichtbar</label>
 			<label index="fe_bordercolor">Rahmenfarbe im Frontend</label>
+			<label index="fe_bgcolor">Hintergrundfarbe im Frontend</label>
 			<label index="fe_borderthickness">Rahmendicke im frontend(px)</label>
 			<label index="fe_mouseover">Rahmen nur bei mouseover sichtbar</label>
 			<label index="fe_options">Frontend Optionen</label>
@@ -208,6 +217,13 @@
 			<label index="erroc">Ein Fehler ist aufgetreten:</label>
 			<label index="contaction">Trotzdem mit der Aktion fortfahren?</label>
 			<label index="polyclick">Bei Klick auf das Bild Punkte hinzufügen</label>
+			<label index="contentbox">Content Box</label>
+			<label index="contentboxid">Content Element</label>
+			<label index="contentboxactivated">Content Box aktiv</label>
+			<label index="browseforelements">Datensätze durchblättern</label>
+			<label index="delelement">Objekt löschen</label>
+			<label index="elementhidden">Objekt ist versteckt</label>
+			<label index="elementdeleted">Objekt ist gelöscht</label>
 		</languageKey>
 	</data>
 </T3locallang>
