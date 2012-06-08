@@ -10,6 +10,22 @@ function a_toggle(elm) {
   document.getElementById(elm).style.display  = disp;
 }
 
+//setInterval('checkcbid()',10);
+function checkcbid() {
+	val = document.getElementById('cbid').value;
+	if(val.length > 0) {
+		if(val.indexOf('#') != -1) {
+			valarr = val.split('#');
+			if(valarr[1]) { document.getElementById('cbid').value = parseInt(valarr[1]); }
+			else { document.getElementById('cbid').value = ''; }
+		}
+		else {
+			if(!isNaN(val)) { document.getElementById('cbid').value = parseInt(val); }
+		}
+	}
+}
+
+
 // Mouseover change of pane background colors
 function tbg_ov(obj) { obj.style.backgroundColor = '#E3E2E2'; }
 function tbg_out(obj) { obj.style.backgroundColor = '#EFEFF4'; }

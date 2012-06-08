@@ -131,6 +131,27 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				<script language="javascript" type="text/javascript">
 					script_ended = 1;
 					if (top.fsMod) top.fsMod.recentIds["file"] = '.intval($this->id).';
+					function setFormValueFromBrowseWin(a,b,c) {
+						barr = b.split(\'_\');
+						bnum = barr[(barr.length-1)];
+						btitle = (c.length > 0) ? c : \'[\'+bnum+\']\';
+						document.getElementById(\'cbid\').value = bnum;
+						document.getElementById(\'cbtext\').innerHTML = btitle;
+						document.getElementById(\'cbtext\').title = btitle;
+						document.getElementById(\'cbtext\').style.display = \'block\';
+						document.getElementById(\'cbdel\').style.display = \'block\';
+						document.getElementById(\'cbwarning\').style.display = \'none\';
+					}
+					function delcbid() {
+						document.getElementById(\'cbtext\').innerHTML = \'\';
+						document.getElementById(\'cbtext\').style.display = \'none\';
+						document.getElementById(\'cbdel\').style.display = \'none\';
+						document.getElementById(\'cbid\').value = \'\';
+						document.getElementById(\'cbtext\').title = \'\';
+						document.getElementById(\'cbwarning\').style.display = \'none\';
+					}
+					
+					
 				</script>
 				<link rel="stylesheet" type="text/css" href="colpicker/js_color_picker_v2.css" media="screen" />
 			';
@@ -145,9 +166,15 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 			$this->content.=$this->doc->startPage($LANG->getLL("title"));
 			$this->content.=$this->doc->header($LANG->getLL("title"));
 			$this->content.=$this->doc->spacer(5);
-			$this->content.=$this->doc->section("",$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,"SET[function]",$this->MOD_SETTINGS["function"],$this->MOD_MENU["function"])));
+			$this->content.= $this->doc->section("",$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,"SET[function]",$this->MOD_SETTINGS["function"],$this->MOD_MENU["function"])));
 			$this->content.=$this->doc->divider(5);
 
+			$carr = explode('<body',$this->content);
+			$cpos = strpos($carr[1],'>');
+			$btag = substr($carr[1],0,$cpos+1);
+			$bodytag = '<body'.$btag;
+			//$this->content = str_replace($bodytag,$bodytag."\n".'<form name="editform" id="editform" enctype="multipart/form-data" action="#"><input type="text" name="data[cbid][cbid][cbid]"></form>',$this->content);
+			
 			// Render content:
 			if ( t3lib_div::_GP('area_page') ) { $this->areaContent(); }
 			else															 { $this->mapContent(); }
@@ -584,6 +611,24 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 					default:
 					break;
 				}
+				
+				$active = (t3lib_div::_GP('cb_active') == 1) ? t3lib_div::_GP('cb_active') : 0;
+				if ( ! $db->exec_INSERTquery( 'tx_mwimagemap_contentpopup',
+				array( 'aid' => $area_id,
+				'active' => $active,
+				'content_id' => t3lib_div::_GP('cbid'),
+				'popup_width' => t3lib_div::_GP('cb_width'),
+				'popup_height' => t3lib_div::_GP('cb_height'),
+				'popup_x' => t3lib_div::_GP('cb_x'),
+				'popup_y' => t3lib_div::_GP('cb_y'),
+				'popup_bordercolor' => t3lib_div::_GP('cb_bcol'),
+				'popup_borderwidth' => t3lib_div::_GP('cb_borderthickness'),
+				'popup_backgroundcolor' => t3lib_div::_GP('cb_bgcol')
+				) ) ) {
+					$this->err .= 'edit: sql_error: '.$db->sql_error().'<br />';
+					break;
+				}
+				
 				$this -> checkFecache();
 			break;
 
@@ -593,6 +638,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 					break;
 				}
 				if ( ! $db->exec_DELETEquery('tx_mwimagemap_point', 'aid = ' . $area_id) ) { $this->err .= 'delpoint sql_error: '.$db->sql_error(); }
+				if ( ! $db->exec_DELETEquery('tx_mwimagemap_contentpopup', 'aid = ' . $area_id) ) { $this->err .= 'delpoint sql_error: '.$db->sql_error(); }
 				$this -> checkFecache();
 			break;
 
@@ -622,6 +668,46 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 					if (!preg_match("/^#[a-f0-9]{6}$/i", $fe_bcol) ) { $fe_bcol = t3lib_div::_GP('color'); }
 					if(!preg_match("/^[-]?[0-9]+([\.][0-9]+)?$/i", $fe_bths)) { $fe_bths = '1'; }
 				}
+
+				$active = (t3lib_div::_GP('cb_active') == 1) ? t3lib_div::_GP('cb_active') : 0;
+				if ( ! ( $res = $db->exec_SELECTquery('count(*)', 'tx_mwimagemap_contentpopup', 'aid = '.$area_id) ) || ! ( $row = $db->sql_fetch_row($res) ) ) {
+						$this->err .= 'edit: exec_SELECT sql_error: '.$db->sql_error().'<br />';
+						break;
+				}
+				if($row[0] > 0) {
+					if ( ! $db->exec_UPDATEquery( 'tx_mwimagemap_contentpopup', 'aid = '.$area_id,
+					array(
+					'active' => $active,
+					'content_id' => t3lib_div::_GP('cbid'),
+					'popup_width' => t3lib_div::_GP('cb_width'),
+					'popup_height' => t3lib_div::_GP('cb_height'),
+					'popup_x' => t3lib_div::_GP('cb_x'),
+					'popup_y' => t3lib_div::_GP('cb_y'),
+					'popup_bordercolor' => t3lib_div::_GP('cb_bcol'),
+					'popup_borderwidth' => t3lib_div::_GP('cb_borderthickness'),
+					'popup_backgroundcolor' => t3lib_div::_GP('cb_bgcol')
+					) ) ) {
+						$this->err .= 'edit: sql_error: '.$db->sql_error().'<br />';
+						break;
+					}
+				}
+				else {
+					if ( ! $db->exec_INSERTquery( 'tx_mwimagemap_contentpopup',
+					array( 'aid' => $area_id,
+					'active' => $active,
+					'content_id' => t3lib_div::_GP('cbid'),
+					'popup_width' => t3lib_div::_GP('cb_width'),
+					'popup_height' => t3lib_div::_GP('cb_height'),
+					'popup_x' => t3lib_div::_GP('cb_x'),
+					'popup_y' => t3lib_div::_GP('cb_y'),
+					'popup_bordercolor' => t3lib_div::_GP('cb_bcol'),
+					'popup_borderwidth' => t3lib_div::_GP('cb_borderthickness'),
+					'popup_backgroundcolor' => t3lib_div::_GP('cb_bgcol')
+					) ) ) {
+						$this->err .= 'edit: sql_error: '.$db->sql_error().'<br />';
+						break;
+					}
+				}
 				
 				if ( ! $db->exec_UPDATEquery( 'tx_mwimagemap_area', 'id = '.$area_id,
 				array( 'description' => $desc,
@@ -635,6 +721,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 					$this->err .= 'edit: sql_error: '.$db->sql_error().'<br />';
 					break;
 				}
+				
 				switch ( intval(t3lib_div::_GP('type')) ) {
 					case MWIM_RECTANGLE:
 						$this->err .= $this->edit_rect($area_id);
@@ -662,7 +749,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				$x = intval(trim(t3lib_div::_GP('xmov')));
 				$y = intval(trim(t3lib_div::_GP('ymov')));
 				if ( !$x && !$y ) { break; }
-				$arr = explode(',', t3lib_div::_GP('areaids'));
+				$arr = split(',', t3lib_div::_GP('areaids'));
 				foreach( $arr as $val ) {
 					if ( ! ( $res = $db->exec_SELECTquery('type', 'tx_mwimagemap_area', 'id = '.$val) ) ) {
 						$this->err .= 'exec_select sql_error: '.$db->sql_error().'<br />';
@@ -777,6 +864,17 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				$markerArray['###L_FE_BORDERTHICKNESS###'] = $LANG->getLL('fe_borderthickness');
 				$markerArray['###L_FE_MOUSEOVER###'] = $LANG->getLL('fe_mouseover');
 				$markerArray['###FE_OPTIONS###'] = $LANG->getLL('fe_options');
+				$markerArray['###CONTENT_BOX###'] = $LANG->getLL('contentbox');
+				$markerArray['###L_CB_ACTIVE###'] = $LANG->getLL('contentboxactivated');
+				$markerArray['###L_CB_WIDTH###'] = $LANG->getLL('X Size');
+				$markerArray['###L_CB_HEIGHT###'] = $LANG->getLL('Y Size');
+				$markerArray['###L_CB_X###'] = $LANG->getLL('X Pos');
+				$markerArray['###L_CB_Y###'] = $LANG->getLL('Y Pos');
+				$markerArray['###L_CB_ID###'] = $LANG->getLL('contentboxid');
+				$markerArray['###L_FE_BGCOLOR###'] = $LANG->getLL('fe_bgcolor');
+				$markerArray['###DEL_ELEMENT###'] = $LANG->getLL('delelement');
+				$markerArray['###ADD_ELEMENT###'] = $LANG->getLL('browseforelements');
+				
 				if ( ! isset($_SESSION['mwim_blink']) ) { $_SESSION['mwim_blink'] = 1; }
 				if ( $_SESSION['mwim_blink'] ) { $markerArray['###BLINK###'] = 'checked'; }
 				else { $markerArray['###BLINK###'] = ''; }
@@ -1032,7 +1130,66 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 		$mA['###L_FE_BORDERTHICKNESS###'] = $LANG->getLL('fe_borderthickness');
 		$mA['###L_FE_MOUSEOVER###'] = $LANG->getLL('fe_mouseover');
 		$mA['###FE_OPTIONS###'] = $LANG->getLL('fe_options');
+		$mA['###CONTENT_BOX###'] = $LANG->getLL('contentbox');
+		$mA['###L_CB_ACTIVE###'] = $LANG->getLL('contentboxactivated');
+		$mA['###L_CB_WIDTH###'] = $LANG->getLL('X Size');
+		$mA['###L_CB_HEIGHT###'] = $LANG->getLL('Y Size');
+		$mA['###L_CB_X###'] = $LANG->getLL('X Pos');
+		$mA['###L_CB_Y###'] = $LANG->getLL('Y Pos');
+		$mA['###L_CB_ID###'] = $LANG->getLL('contentboxid');
+		$mA['###L_FE_BGCOLOR###'] = $LANG->getLL('fe_bgcolor');
+		$mA['###DEL_ELEMENT###'] = $LANG->getLL('delelement');
+		$mA['###ADD_ELEMENT###'] = $LANG->getLL('browseforelements');
+		
 		$mA['###AID###'] = $aid;
+		$mA['###L_CBWARNING_DISPLAY###'] = 'none';
+		$mA['###CB_WARNING###'] = '';
+		$mA['###CBCID###'] = '';
+		$mA['###CHECK_CB_ACTIVE###'] = '';
+		$mA['###CBW###'] = '';
+		$mA['###CBH###'] = '';
+		$mA['###CBX###'] = '';
+		$mA['###CBY###'] = '';
+		$mA['###CB_BCOL###'] = '';
+		$mA['###CBT###'] = '';
+		$mA['###CB_BGCOL###'] = '';
+		$mA['###L_CB_TEXT###'] = '';
+		
+		if ( ! ( $res = $db->exec_SELECTquery('content_id,popup_width,popup_height,popup_x,popup_y,popup_bordercolor,popup_borderwidth,active,popup_backgroundcolor', 'tx_mwimagemap_contentpopup', 'aid = '.$aid) ) ) {
+			$this->err .= 'select area: $db->sql_error(): '.$db->sql_error().'<br />';
+		}
+		elseif ( ( $row = $db->sql_fetch_row($res) ) ) {
+			$btitle = '';
+			if ( ! ( $res2 = $db->exec_SELECTquery('header,hidden,deleted', 'tt_content', 'uid = '.$row[0]) ) ) {
+				$this->err .= 'select area: $db->sql_error(): '.$db->sql_error().'<br />';
+			}
+			elseif ( ( $row2 = $db->sql_fetch_row($res2) ) ) {
+				$btitle = (strlen($row2[0]) > 0) ? $row2[0] : '['.$row[0].']';
+				if($row2[1] == 1) {
+					$mA['###L_CBWARNING_DISPLAY###'] = 'block';
+					$mA['###CB_WARNING###'] = $LANG->getLL('elementhidden');
+				}
+				else if($row2[2] == 1) {
+					$mA['###L_CBWARNING_DISPLAY###'] = 'block';
+					$mA['###CB_WARNING###'] = $LANG->getLL('elementdeleted');
+				}
+				else {
+					$mA['###L_CBWARNING_DISPLAY###'] = 'none';
+					$mA['###CB_WARNING###'] = '';
+				}
+			}
+			$mA['###CBCID###'] = $row[0];
+			$mA['###CHECK_CB_ACTIVE###'] = ($row[7] == 1) ? 'checked ="checked"' : '';
+			$mA['###CBW###'] = $row[1];
+			$mA['###CBH###'] = $row[2];
+			$mA['###CBX###'] = $row[3];
+			$mA['###CBY###'] = $row[4];
+			$mA['###CB_BCOL###'] = $row[5];
+			$mA['###CBT###'] = $row[6];
+			$mA['###CB_BGCOL###'] = $row[8];
+			$mA['###L_CB_TEXT###'] = $btitle;
+			$mA['###L_CB_DISPLAY###'] = 'block';
+		}
 		
 		if ( ! ( $res = $db->exec_SELECTquery('fe_bordercolor, fe_borderthickness, fe_visible', 'tx_mwimagemap_area', 'id = '.$aid) ) ) {
 			$this->err .= 'select area: $db->sql_error(): '.$db->sql_error().'<br />';
@@ -1335,8 +1492,8 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				switch( intval($row[1]) ) {
 					case 1:
 						$simg = $pic;
-						if (!file_exists($pic)) {
-							$simg = ' '.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png -resize '.$imgsize[0].'!x'.$imgsize[1].'!';
+						if (!is_file($pic)) {
+							$simg = PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png -resize '.$imgsize[0].'!x'.$imgsize[1].'!';
 							if(preg_match("/WIN/",PHP_OS)) { $simg = ' "'.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png" -resize '.$imgsize[0].'!x'.$imgsize[1].'!'; }
 						}
 						if(preg_match("/\.gif/i", $pic)) { $simg = str_replace('canvas.png','canvas.gif',$simg); }
@@ -1352,7 +1509,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 								}
 								
 								if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" "'.$pic.'"'); }
-								else { exec($this->impath.'convert -quality 100 "'.$simg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$pic); }
+								else { exec($this->impath.'convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$pic); }
 							break;
 								
 							// Circle
@@ -1365,7 +1522,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 								}
 								
 								if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" "'.$pic.'"'); }
-								else { exec($this->impath.'convert -quality 100 "'.$simg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$pic); }
+								else { exec($this->impath.'convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$pic); }
 							break;
 								
 							// Polygon
@@ -1377,7 +1534,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 								}
 								
 								if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" "'.$pic.'"'); }
-								else { exec($this->impath.'convert -quality 100 "'.$simg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" '.$pic); }
+								else { exec($this->impath.'convert -quality 100 '.$simg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" '.$pic); }
 							break;
 						}
 						
@@ -1389,7 +1546,6 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 							if(is_file($oldimg)) { unlink($oldimg); }
 							$db->exec_UPDATEquery( 'tx_mwimagemap_map', 'id = '.$mid, array( 'alt_file' => '' ) );
 						}
-							
 					break;
 				}
 			}
@@ -1398,15 +1554,15 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 			if(is_file($oldimg)) { unlink($oldimg); }
 			$db->exec_UPDATEquery( 'tx_mwimagemap_map', 'id = '.$mid, array( 'alt_file' => '' ) );
 		}
-			
+		
 		$res	= $db->exec_SELECTquery( 'id,fe_visible,fe_bordercolor,fe_borderthickness,type,fe_altfile', 'tx_mwimagemap_area', ' fe_visible=2 and mid=\''.$mid.'\'', '', '');
 		if ( $db->sql_num_rows($res) != 0 ) {
 			while ( $row = $db->sql_fetch_row($res) ) {
 				$xpic = $pic;
 				$ypic = PATH_site.'uploads/tx_mwimagemap/'.$row[0].'_'.$af;
 				$timg = $xpic;
-				if (!file_exists($xpic)) {
-					$timg = ' '.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png -resize '.$imgsize[0].'!x'.$imgsize[1].'!';
+				if (!is_file($xpic)) {
+					$timg = PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png -resize '.$imgsize[0].'!x'.$imgsize[1].'!';
 					if(preg_match("/WIN/",PHP_OS)) { $timg = ' "'.PATH_site.'typo3conf/ext/mwimagemap/pi1/canvas.png" -resize '.$imgsize[0].'!x'.$imgsize[1].'!'; }
 				}
 				if(preg_match("/\.gif/i",$ypic)) { $timg = str_replace('canvas.png','canvas.gif',$timg); }
@@ -1428,7 +1584,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 						}
 						
 						if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" "'.$ypic.'"'); }
-						else { exec($this->impath.'convert -quality 100 "'.$timg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$ypic); }
+						else { exec($this->impath.'convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " rectangle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$ypic); }
 						
 	 					if(is_file($ypic)) {
 							if(is_file($oldimg)) { unlink($oldimg); }
@@ -1449,7 +1605,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 						}
 						
 						if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" "'.$ypic.'"'); }
-						else { exec($this->impath.'convert -quality 100 "'.$timg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$ypic); }
+						else { exec($this->impath.'convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " circle '.$points[2].','.$points[3].','.($points[2]+$points[0]).','.($points[3]+$points[1]).'" '.$ypic); }
 								
 	 					if(is_file($ypic)) {
 							if(is_file($oldimg)) { unlink($oldimg); }
@@ -1469,7 +1625,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 						}
 							
 						if(preg_match("/WIN/",PHP_OS)) { exec('"'.rtrim($this->impath).'" convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" "'.$ypic.'"'); }
-						else { exec($this->impath.'convert -quality 100 "'.$timg.'" -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" '.$ypic); }
+						else { exec($this->impath.'convert -quality 100 '.$timg.' -stroke "rgb('.$bc.')" -strokewidth '.$row[3].' -fill none -draw " polygon '.$points.'" '.$ypic); }
 								
 	 					if(is_file($ypic)) {
 							if(is_file($oldimg)) { unlink($oldimg); }

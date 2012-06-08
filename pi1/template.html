@@ -1,14 +1,61 @@
+Subparts "OVERLAY" and "NON-OVERLAY"
+---------------------
+###MAPCANVAS###			: The canvas image used in the Overlay template. Is normally assigned automatically.
+###IMAGE_WIDTH###		: The width of the image to which the imagemap is applied
+###IMAGE_HEIGHT###	: The height of the image to which the imagemap is applied
+###ID###						: The ID of the imagemap. Must be unique. Is normally assigned automatically.
+###MAP_TITLE###			: Is appplied to the "alt"-attribute of the image.
+###ROIMAGES###			: The rollover images which are used in the overlay template. These images are created automatically.
+
 <!-- ###OVERLAY### -->
-<img src="###MAPCANVAS###" width="###W###" height="###H###" id="tx_mwimagemap_img_###ID###" usemap="#map_###ID###" alt="###ALT_IMG###" style="border:0px;background-image:URL(###MAP###);background-repeat:no-repeat;" />
+<div style="position:relative">
+<img src="###MAPCANVAS###" width="###IMAGE_WIDTH###" height="###IMAGE_HEIGHT###" id="tx_mwimagemap_img_###ID###" usemap="#map_###ID###" alt="###MAP_TITLE###" style="border:0px;background-image:URL(###MAP###);background-repeat:no-repeat;" />
 ###ROIMAGES###
 <map name="map_###ID###" id="map_###ID###">
 ###AREAS###
 </map>
+###CBOXES###
+</div>
 <!-- ###OVERLAY### -->
 
 <!-- ###NON_OVERLAY### -->
-<img src="###MAP###" width="###W###" height="###H###" border="0" id="tx_mwimagemap_img_###ID###" usemap="#map_###ID###" alt="###ALT_IMG###" />
+<div style="position:relative">
+<img src="###MAP###" width="###IMAGE_WIDTH###" height="###IMAGE_HEIGHT###" border="0" id="tx_mwimagemap_img_###ID###" usemap="#map_###ID###" alt="###MAP_TITLE###" />
 <map name="map_###ID###" id="map_###ID###">
 ###AREAS###
 </map>
+###CBOXES###
+</div>
 <!-- ###NON_OVERLAY### -->
+
+
+
+Subpart "AREA"
+---------------------
+###SHAPE###				: The shape of an area ("rect", "circle", "polygon" or "default")
+###AREA_TITLE###	: The title of an area
+###COORDS###			: The coordinates which specify position, size and form of an area. Should be integers seperated by comma.
+###LINK###				: The link of an area
+###TARGET###			: The target of the area-link
+
+<!-- ###AREA### -->
+<area shape="###SHAPE###" ###ADDPARAMS### coords="###COORDS###" href="###LINK###" target="###TARGET###" />
+<!-- ###AREA### -->
+
+
+
+Subpart "CBOX"
+---------------------
+###CBOX_ID###					: The ID of a contentbox. Should be unique and is normally automatically assigned.
+###CSS_WIDTH###				: The width of a contentbox.
+###CSS_HEIGHT###			: The height of a contentbox.
+###CSS_TOP###					: Vertical positioning of a contentbox.
+###CSS_LEFT###				: Horizontal positioning of a contentbox.
+###CSS_BACKGROUND###	: Background color of a contentbox.
+###CSS_BORDER###			: Border of a contentbox.
+###CSS_ADDITIONAL###	: Additional css-settings for a contentbox. Can be set by typoscript or by using the hook. Please refer to the manual for more information.
+###CONTENT###					: The Content of a contentbox.
+
+<!-- ###CBOX### -->
+<div class="txmwimagemap_cbox txmwimagemap_cbox_###CBOX_ID###" id="txmwimagemap_cbox_###CBOX_ID###" style="z-index: 50000;position:absolute;display:none;###CSS_WIDTH######CSS_HEIGHT######CSS_TOP######CSS_LEFT######CSS_BACKGROUND######CSS_BORDER######CSS_ADDITIONAL###">###CONTENT###</div>
+<!-- ###CBOX### -->
