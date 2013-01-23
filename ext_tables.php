@@ -6,6 +6,19 @@ $tx_mwimagemap_extconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf
 include_once(t3lib_extMgm::extPath($_EXTKEY)."class.tx_mwimagemap_ufunc.php");
 include_once(t3lib_extMgm::extPath($_EXTKEY)."class.tx_mwimagemap.php");
 
+$extarr = explode(',',$TYPO3_CONF_VARS['EXT']['extList']);
+$dam = false;
+if(in_array('dam',$extarr)) {
+	$dam = true;
+	$extarr_new = array();
+	foreach($extarr as $ext) {
+		if($ext != 'mwimagemap') { $extarr_new[] = $ext; }
+	}
+	$TYPO3_CONF_VARS['EXT']['extList'] = implode(',',$extarr_new);
+	$TYPO3_CONF_VARS['EXT']['extList'] .= ',mwimagemap';
+	$GLOBALS['TYPO3_CONF_VARS']['EXT']['extList'] = $TYPO3_CONF_VARS['EXT']['extList'];
+}
+
 t3lib_extMgm::addStaticFile($_EXTKEY, 'static/pi1/', 'MW Imagemap');
 
 t3lib_div::loadTCA('tt_content');
@@ -80,7 +93,8 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi1', '
 t3lib_extMgm::addPlugin(Array('LLL:EXT:mwimagemap/locallang_db.php:tt_content.list_type_pi1', $_EXTKEY.'_pi1'),'list_type');
 
 if (TYPO3_MODE=="BE")	{
-	t3lib_extMgm::addModule("file","txmwimagemapM1","",t3lib_extMgm::extPath($_EXTKEY)."mod1/");
+	if($dam == true) { t3lib_extMgm::addModule('txdamM1','mwimagemap','',t3lib_extMgm::extPath('mwimagemap')."mod1/"); }
+	else { t3lib_extMgm::addModule("file","txmwimagemapM1","",t3lib_extMgm::extPath($_EXTKEY)."mod1/"); }
 	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]["tx_mwimagemap_pi1_wizicon"] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_mwimagemap_pi1_wizicon.php';
 }
 ?>

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007,2012 Michael Perlbach (info@mikelmade.de)
+*  (c) 2007,2013 Michael Perlbach (info@mikelmade.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -270,6 +270,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 	*/
 	function create_link_from_browser( $txt ) {
 		$txt = trim($txt);
+		if($txt == '#') { return $txt; }
 		if ( ( $pos = strpos($txt, ' ') ) !== FALSE ) {
 			if ( ctype_digit($txt[$pos+1]) ) {
 				$url[1] = '_blank';
@@ -336,11 +337,13 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 		$linkparts = explode(' ',$this->link);
 		$mA['###LINK###'] = '';
 		$mA['###TARGET###'] = '';
+	
 		foreach($linkparts as $linkpart) {
 			if(preg_match('/href\=/',$linkpart)) { $mA['###LINK###'] = str_replace(array('href=','"'),'',$linkpart); }
 			else if(preg_match('/target\=/',$linkpart)) { $mA['###TARGET###'] = str_replace(array('target=','"'),'',$linkpart); }
 		}
-		return $this->cObj->substituteMarkerArray($this->areasubpart, $mA);
+		$area = str_replace('target=""','',$this->cObj->substituteMarkerArray($this->areasubpart, $mA));
+		return $area;
 	}
 	
 	/**

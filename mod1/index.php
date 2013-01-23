@@ -2,7 +2,7 @@
 /***************************************************************
 *	Copyright notice
 *
-*	(c) 2007,2012 Michael Perlbach (info@mikelmade.de)
+*	(c) 2007,2013 Michael Perlbach (info@mikelmade.de)
 *	All rights reserved
 *
 *	This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,34 +36,22 @@ require ($BACK_PATH.'template.php');
 $LANG->includeLLFile('EXT:mwimagemap/mod1/locallang_mod.xml');
 
 
-if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) {
-				define('PATH_tslib', PATH_site.'typo3/sysext/cms/tslib/');
-} elseif (@is_dir(PATH_site.'tslib/')) {
-				define('PATH_tslib', PATH_site.'tslib/');
-} else {
+if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) { define('PATH_tslib', PATH_site.'typo3/sysext/cms/tslib/'); }
+elseif (@is_dir(PATH_site.'tslib/')) { define('PATH_tslib', PATH_site.'tslib/'); }
+else {
+	// define path to tslib/ here:
+	$configured_tslib_path = '';
 
-				// define path to tslib/ here:
-				$configured_tslib_path = '';
-
-				// example:
-				// $configured_tslib_path = '/var/www/mysite/typo3/sysext/cms/tslib/';
-
-				define('PATH_tslib', $configured_tslib_path);
+	// example: $configured_tslib_path = '/var/www/mysite/typo3/sysext/cms/tslib/';
+	define('PATH_tslib', $configured_tslib_path);
 }
 
-if (PATH_tslib=='') {
-				die('Cannot find tslib/. Please set path by defining $configured_tslib_path in '.basename(PATH_thisScript).'.');
-}
+if (PATH_tslib=='') { die('Cannot find tslib/. Please set path by defining $configured_tslib_path in '.basename(PATH_thisScript).'.'); }
 
 require_once (PATH_t3lib.'class.t3lib_scbase.php');
-/*if ( $TYPO_VERSION[0] > 3 )
-	require_once (PATH_site.'typo3/sysext/cms/tslib/class.tslib_content.php');
-else
-	require_once (PATH_site.'tslib/class.tslib_content.php');*/
 require_once (PATH_tslib.'class.tslib_content.php');
 require_once (t3lib_extMgm::extPath('mwimagemap').'constants.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
-	// DEFAULT initialization of a module [END]
 
 define('UPLOAD_DIR', 'uploads/tx_mwimagemap/');
 define('MODULE_DIR', t3lib_extMgm::extPath('mwimagemap').'mod1/');
@@ -80,14 +68,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
 		parent::init();
-
 		$this->cObj = t3lib_div::makeInstance('tslib_cObj');
-
-		/*
-		if (t3lib_div::_GP("clear_all_cache"))	{
-			$this->include_once[]=PATH_t3lib."class.t3lib_tcemain.php";
-		}
-		*/
 	}
 
 	/**
@@ -95,12 +76,10 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 	 */
 	function menuConfig()	{
 		global $LANG;
-		$this->MOD_MENU = Array (
-		);
+		$this->MOD_MENU = Array ();
 		parent::menuConfig();
 	}
 
-		// If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
 	/**
 	 * Main function of the module. Write the content to $this->content
 	 */
@@ -113,78 +92,74 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 		if($GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] == 'gm') { $this->impath .= 'gm '; }
 		$path = substr(t3lib_div::_GP('id'), strlen(PATH_site));
 
-				// Draw the header.
-			$this->doc = t3lib_div::makeInstance("mediumDoc");
-			$this->doc->backPath = $BACK_PATH;
+		// Draw the header.
+		$this->doc = t3lib_div::makeInstance("mediumDoc");
+		$this->doc->backPath = $BACK_PATH;
 
-				// JavaScript
-			$this->doc->JScode = '
-				<script language="javascript" type="text/javascript">
-					script_ended = 0;
-					function jumpToUrl(URL)	{
-						document.location = URL;
-					}
-				</script>
-				<script type="text/javascript" src="js/functions.js"></script>
-			';
-			$this->doc->postCode='
-				<script language="javascript" type="text/javascript">
-					script_ended = 1;
-					if (top.fsMod) top.fsMod.recentIds["file"] = '.intval($this->id).';
-					function setFormValueFromBrowseWin(a,b,c) {
-						barr = b.split(\'_\');
-						bnum = barr[(barr.length-1)];
-						btitle = (c.length > 0) ? c : \'[\'+bnum+\']\';
-						document.getElementById(\'cbid\').value = bnum;
-						document.getElementById(\'cbtext\').innerHTML = btitle;
-						document.getElementById(\'cbtext\').title = btitle;
-						document.getElementById(\'cbtext\').style.display = \'block\';
-						document.getElementById(\'cbdel\').style.display = \'block\';
-						document.getElementById(\'cbwarning\').style.display = \'none\';
-					}
-					function delcbid() {
-						document.getElementById(\'cbtext\').innerHTML = \'\';
-						document.getElementById(\'cbtext\').style.display = \'none\';
-						document.getElementById(\'cbdel\').style.display = \'none\';
-						document.getElementById(\'cbid\').value = \'\';
-						document.getElementById(\'cbtext\').title = \'\';
-						document.getElementById(\'cbwarning\').style.display = \'none\';
-					}
-					
-					
-				</script>
-				<link rel="stylesheet" type="text/css" href="colpicker/js_color_picker_v2.css" media="screen" />
-			';
-
-			// create the temporary folder for thumbnail-images, if it doesn't exist
-			if (!is_dir(PATH_site.'typo3temp/tx_mwimagemap/')) {
-				t3lib_div::mkdir(PATH_site.'typo3temp/tx_mwimagemap/');
-			}
-
-			$headerSection = $this->doc->getHeader("pages",$this->pageinfo,$this->pageinfo["_thePath"])."<br>".$LANG->sL("LLL:EXT:lang/locallang_core.php:labels.path").": ".t3lib_div::fixed_lgd_cs($path,50);
+		// JavaScript
+		$this->doc->JScode = '
+			<script language="javascript" type="text/javascript">
+				script_ended = 0;
+				function jumpToUrl(URL)	{ document.location = URL; }
+			</script>
+			<script type="text/javascript" src="js/functions.js"></script>';
 			
-			$this->content.=$this->doc->startPage($LANG->getLL("title"));
-			$this->content.=$this->doc->header($LANG->getLL("title"));
-			$this->content.=$this->doc->spacer(5);
-			$this->content.= $this->doc->section("",$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,"SET[function]",$this->MOD_SETTINGS["function"],$this->MOD_MENU["function"])));
-			$this->content.=$this->doc->divider(5);
+		$this->doc->postCode='
+			<script language="javascript" type="text/javascript">
+				script_ended = 1;
+				if (top.fsMod) top.fsMod.recentIds["file"] = '.intval($this->id).';
+				function setFormValueFromBrowseWin(a,b,c) {
+					barr = b.split(\'_\');
+					bnum = barr[(barr.length-1)];
+					btitle = (c.length > 0) ? c : \'[\'+bnum+\']\';
+					document.getElementById(\'cbid\').value = bnum;
+					document.getElementById(\'cbtext\').innerHTML = btitle;
+					document.getElementById(\'cbtext\').title = btitle;
+					document.getElementById(\'cbtext\').style.display = \'block\';
+					document.getElementById(\'cbdel\').style.display = \'block\';
+					document.getElementById(\'cbwarning\').style.display = \'none\';
+				}
+				function delcbid() {
+					document.getElementById(\'cbtext\').innerHTML = \'\';
+					document.getElementById(\'cbtext\').style.display = \'none\';
+					document.getElementById(\'cbdel\').style.display = \'none\';
+					document.getElementById(\'cbid\').value = \'\';
+					document.getElementById(\'cbtext\').title = \'\';
+					document.getElementById(\'cbwarning\').style.display = \'none\';
+				}	
+			</script>
+			<link rel="stylesheet" type="text/css" href="colpicker/js_color_picker_v2.css" media="screen" />
+			<style type="text/css"> /*<![CDATA[*/ <!-- 
+			body { padding-left:20px; }
+			--> /*]]>*/
+			</style>';
+		// create the temporary folder for thumbnail-images, if it doesn't exist
+		if (!is_dir(PATH_site.'typo3temp/tx_mwimagemap/')) {
+			t3lib_div::mkdir(PATH_site.'typo3temp/tx_mwimagemap/');
+		}
 
-			$carr = explode('<body',$this->content);
-			$cpos = strpos($carr[1],'>');
-			$btag = substr($carr[1],0,$cpos+1);
-			$bodytag = '<body'.$btag;
-			//$this->content = str_replace($bodytag,$bodytag."\n".'<form name="editform" id="editform" enctype="multipart/form-data" action="#"><input type="text" name="data[cbid][cbid][cbid]"></form>',$this->content);
+		$headerSection = $this->doc->getHeader("pages",$this->pageinfo,$this->pageinfo["_thePath"])."<br>".$LANG->sL("LLL:EXT:lang/locallang_core.php:labels.path").": ".t3lib_div::fixed_lgd_cs($path,50);
 			
-			// Render content:
-			if ( t3lib_div::_GP('area_page') ) { $this->areaContent(); }
-			else															 { $this->mapContent(); }
+		$this->content.=$this->doc->startPage($LANG->getLL("title"));
+		$this->content.=$this->doc->header($LANG->getLL("title"));
+		$this->content.=$this->doc->spacer(5);
+		$this->content.= $this->doc->section("",$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,"SET[function]",$this->MOD_SETTINGS["function"],$this->MOD_MENU["function"])));
+		$this->content.=$this->doc->divider(5);
 
+		$carr = explode('<body',$this->content);
+		$cpos = strpos($carr[1],'>');
+		$btag = substr($carr[1],0,$cpos+1);
+		$bodytag = '<body'.$btag;
 
-			// ShortCut
-			if ($BE_USER->mayMakeShortcut())	{	
-				$this->content.=$this->doc->spacer(20).$this->doc->section("",$this->doc->makeShortcutIcon("id",implode(",",array_keys($this->MOD_MENU)),$this->MCONF["name"]));
-			}
-			$this->content.=$this->doc->spacer(10);
+		// Render content:
+		if ( t3lib_div::_GP('area_page') ) { $this->areaContent(); }
+		else { $this->mapContent(); }
+
+		// ShortCut
+		if ($BE_USER->mayMakeShortcut())	{	
+			$this->content.=$this->doc->spacer(20).$this->doc->section("",$this->doc->makeShortcutIcon("id",implode(",",array_keys($this->MOD_MENU)),$this->MCONF["name"]));
+		}
+		$this->content.=$this->doc->spacer(10);
 	}
 
 	/**
@@ -196,7 +171,6 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 	}
 
 	function create_thumb($filename, $path) {
-		
 		$img_data = getimagesize ( PATH_site . $path . $filename );
 		$width		= $img_data['0'];
 		$height	 = $img_data['1'];
@@ -220,11 +194,24 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 		global $LANG;
 			
 		$path = substr(t3lib_div::_GP('id'), strlen(PATH_site));
+		
+		if(preg_match('/\:/',t3lib_div::_GP('id'))) {
+			$parr = explode(':',t3lib_div::_GP('id'));
+			$path = 'fileadmin'.$parr[1];
+		}
+		
+		if(isset($_GET['SLCMD']['SELECT']['txdamFolder'])) {
+			$patharr = array_keys($_GET['SLCMD']['SELECT']['txdamFolder']);
+			$path = $patharr[0];
+			$path = str_replace(PATH_site,'',$path);
+		}
+		
 		if ( $path == "" || ! is_dir(PATH_site . $path) ) {
 			$this->content .= $this->doc->section($LANG->getLL('err'), $LANG->getLL('choos_dir'), 0, 1);
 			return true;
 		}
 		if ( $path[strlen($path)-1] != '/' ) { $path .= '/'; }
+		
 		$db =& $GLOBALS['TYPO3_DB'];
 		$content = '';
 		$template = file_get_contents( MODULE_DIR.'/templates/template_map.html' );
