@@ -6,8 +6,7 @@ require_once (PATH_t3lib."class.t3lib_tsparser_ext.php");
 class tx_mwimagemap {
 	/**
 		* Manipulating the input array, $params, adding new selectorbox items.
-		*/
-	 
+	*/
 	function main(&$params) {
 		global $LANG,$FILEMOUNTS, $TSBE;
 		$db								 = &$GLOBALS['TYPO3_DB'];

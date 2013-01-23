@@ -6,7 +6,6 @@ Subparts "OVERLAY" and "NON-OVERLAY"
 ###ID###						: The ID of the imagemap. Must be unique. Is normally assigned automatically.
 ###MAP_TITLE###			: Is appplied to the "alt"-attribute of the image.
 ###ROIMAGES###			: The rollover images which are used in the overlay template. These images are created automatically.
-
 <!-- ###OVERLAY### -->
 <div style="position:relative">
 <img src="###MAPCANVAS###" width="###IMAGE_WIDTH###" height="###IMAGE_HEIGHT###" id="tx_mwimagemap_img_###ID###" usemap="#map_###ID###" alt="###MAP_TITLE###" style="border:0px;background-image:URL(###MAP###);background-repeat:no-repeat;" />
@@ -17,7 +16,6 @@ Subparts "OVERLAY" and "NON-OVERLAY"
 ###CBOXES###
 </div>
 <!-- ###OVERLAY### -->
-
 <!-- ###NON_OVERLAY### -->
 <div style="position:relative">
 <img src="###MAP###" width="###IMAGE_WIDTH###" height="###IMAGE_HEIGHT###" border="0" id="tx_mwimagemap_img_###ID###" usemap="#map_###ID###" alt="###MAP_TITLE###" />
@@ -27,9 +25,6 @@ Subparts "OVERLAY" and "NON-OVERLAY"
 ###CBOXES###
 </div>
 <!-- ###NON_OVERLAY### -->
-
-
-
 Subpart "AREA"
 ---------------------
 ###SHAPE###				: The shape of an area ("rect", "circle", "polygon" or "default")
@@ -37,13 +32,9 @@ Subpart "AREA"
 ###COORDS###			: The coordinates which specify position, size and form of an area. Should be integers seperated by comma.
 ###LINK###				: The link of an area
 ###TARGET###			: The target of the area-link
-
 <!-- ###AREA### -->
 <area shape="###SHAPE###" ###ADDPARAMS### coords="###COORDS###" href="###LINK###" target="###TARGET###" />
 <!-- ###AREA### -->
-
-
-
 Subpart "CBOX"
 ---------------------
 ###CBOX_ID###					: The ID of a contentbox. Should be unique and is normally automatically assigned.
@@ -55,7 +46,6 @@ Subpart "CBOX"
 ###CSS_BORDER###			: Border of a contentbox.
 ###CSS_ADDITIONAL###	: Additional css-settings for a contentbox. Can be set by typoscript or by using the hook. Please refer to the manual for more information.
 ###CONTENT###					: The Content of a contentbox.
-
 <!-- ###CBOX### -->
 <div class="txmwimagemap_cbox txmwimagemap_cbox_###CBOX_ID###" id="txmwimagemap_cbox_###CBOX_ID###" style="z-index: 50000;position:absolute;display:none;###CSS_WIDTH######CSS_HEIGHT######CSS_TOP######CSS_LEFT######CSS_BACKGROUND######CSS_BORDER######CSS_ADDITIONAL###">###CONTENT###</div>
 <!-- ###CBOX### -->

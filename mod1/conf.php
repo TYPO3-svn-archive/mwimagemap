@@ -1,22 +1,31 @@
 <?php
+define('TYPO3_MODE', 'BE');
 
-	// DO NOT REMOVE OR CHANGE THESE 3 LINES:
-//define('TYPO3_MOD_PATH', '../typo3conf/ext/mwimagemap/mod1/');
-//$BACK_PATH='../../../../typo3/';
-/*if (substr_count($_SERVER['SCRIPT_FILENAME'], 'typo3conf/') > 0)
-{*/
-	define('TYPO3_MOD_PATH', '../typo3conf/ext/mwimagemap/mod1/');
-    $BACK_PATH='../../../../typo3/';
-/*} else {
-	define('TYPO3_MOD_PATH', '../typo3conf/ext/mwimagemap/mod1/');
-	$BACK_PATH='../../../../typo3/';
-}*/
-$MCONF["name"]="file_txmwimagemapM1";
+$confdir = (preg_match('/win/i',PHP_OS) && !preg_match('/darwin/i',PHP_OS)) ? 'ext\mwimagemap\mod1\conf.php' : 'ext/mwimagemap/mod1/conf.php';
+$confdir = (strlen($confdir) == 0) ? 'ext/mwimagemap/mod1/conf.php' : $confdir;
 
-	
+$localconfdir = str_replace($confdir,'',__FILE__);
+$localconfdir = (file_exists($localconfdir.'LocalConfiguration.php')) ? $localconfdir.'LocalConfiguration.php' : $localconfdir.'localconf.php';
+require_once($localconfdir);
+
+define('TYPO3_MOD_PATH', '../typo3conf/ext/mwimagemap/mod1/');
+$BACK_PATH='../../../../typo3/';
+ 
+$extarr = explode(',',$TYPO3_CONF_VARS['EXT']['extList']);
+
+$MCONF['navFrameScriptParam']='&folderOnly=1';
+if(in_array('dam',$extarr)) {
+	$MCONF["name"]="txdamM1_mwimagemap";
+	$MCONF['navFrameScript']='tx_dam_navframe.php';
+}
+else {
+	$MCONF["name"]="file_txmwimagemapM1";
+}
+
 $MCONF["access"]="user,group";
 $MCONF["script"]="index.php";
 
 $MLANG["default"]["tabs_images"]["tab"] = "moduleicon.gif";
 $MLANG["default"]["ll_ref"]="LLL:EXT:mwimagemap/mod1/locallang_mod.xml";
+
 ?>
