@@ -90,7 +90,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 
 		if ( ! ( $this->area_res = $db->sql_query('SELECT id, type, link, param, description, fe_visible, fe_bordercolor, fe_borderthickness, fe_altfile FROM tx_mwimagemap_area WHERE mid = '.$this->map_id) ) ) {
 			return;
-    }
+   }
 
 		$this->cbox = false;
 		$this->borderoptions = array();
@@ -243,7 +243,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 			}
 		}
 
-		// if no frontend borders and no mouseovers were defined, don't use overlay.
+		// if no frontend borders and no mouseovers were set, don't use overlay.
 		if(strlen($this->map[3]) == 0 && strlen($this->markerArray['###ROIMAGES###']) == 0) {
 		  $this->overlay = $this->cObj->getSubpart($this->template, '###NON_OVERLAY###' );
 		}

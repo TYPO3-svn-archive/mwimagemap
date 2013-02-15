@@ -26,7 +26,7 @@
  *
  * @author	Michael Perlbach <info@mikelmade.de>
  */
- 
+
 session_start();
 	// DEFAULT initialization of a module [BEGIN]
 unset($MCONF);
