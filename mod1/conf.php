@@ -3,18 +3,16 @@ define('TYPO3_MODE', 'BE');
 
 $confdir = (preg_match('/win/i',PHP_OS) && !preg_match('/darwin/i',PHP_OS)) ? 'ext\mwimagemap\mod1\conf.php' : 'ext/mwimagemap/mod1/conf.php';
 $confdir = (strlen($confdir) == 0) ? 'ext/mwimagemap/mod1/conf.php' : $confdir;
-
-$localconfdir = str_replace($confdir,'',__FILE__);
-$localconfdir = (file_exists($localconfdir.'LocalConfiguration.php')) ? $localconfdir.'LocalConfiguration.php' : $localconfdir.'localconf.php';
-require_once($localconfdir);
+$damconfdir = str_replace(array('mod1/conf.php','mod1\conf.php'),'',__FILE__);
+$damconfdir .= 'dam.txt';
+$dam = file_get_contents($damconfdir);
 
 define('TYPO3_MOD_PATH', '../typo3conf/ext/mwimagemap/mod1/');
 $BACK_PATH='../../../../typo3/';
  
-$extarr = explode(',',$TYPO3_CONF_VARS['EXT']['extList']);
-
 $MCONF['navFrameScriptParam']='&folderOnly=1';
-if(in_array('dam',$extarr)) {
+
+if($dam == 'true') {
 	$MCONF["name"]="txdamM1_mwimagemap";
 	$MCONF['navFrameScript']='tx_dam_navframe.php';
 }
