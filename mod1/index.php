@@ -736,7 +736,7 @@ class tx_mwimagemap_module1 extends t3lib_SCbase {
 				$x = intval(trim(t3lib_div::_GP('xmov')));
 				$y = intval(trim(t3lib_div::_GP('ymov')));
 				if ( !$x && !$y ) { break; }
-				$arr = split(',', t3lib_div::_GP('areaids'));
+				$arr = explode(',', t3lib_div::_GP('areaids'));
 				foreach( $arr as $val ) {
 					if ( ! ( $res = $db->exec_SELECTquery('type', 'tx_mwimagemap_area', 'id = '.$val) ) ) {
 						$this->err .= 'exec_select sql_error: '.$db->sql_error().'<br />';
