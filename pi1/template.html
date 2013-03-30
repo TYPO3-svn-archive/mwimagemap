@@ -47,5 +47,5 @@ Subpart "CBOX"
 ###CSS_ADDITIONAL###	: Additional css-settings for a contentbox. Can be set by typoscript or by using the hook. Please refer to the manual for more information.
 ###CONTENT###					: The Content of a contentbox.
 <!-- ###CBOX### -->
-<div class="txmwimagemap_cbox txmwimagemap_cbox_###CBOX_ID###" id="txmwimagemap_cbox_###CBOX_ID###" style="z-index: 50000;position:absolute;display:none;###CSS_WIDTH######CSS_HEIGHT######CSS_TOP######CSS_LEFT######CSS_BACKGROUND######CSS_BORDER######CSS_ADDITIONAL###">###CONTENT###</div>
+<div class="txmwimagemap_cbox txmwimagemap_cbox_###CBOX_ID###" id="txmwimagemap_cbox_###CBOX_ID###" style="z-index: 50000;position:absolute;display:none;###CSS_WIDTH######CSS_HEIGHT######CSS_TOP######CSS_LEFT######CSS_BACKGROUND######CSS_BORDER######CSS_ADDITIONAL###" onmouseover="Javascript:mwimagemap_cboxover('txmwimagemap_cbox_###CBOX_ID###')" onmouseout="Javascript:mwimagemap_cboxout('txmwimagemap_cbox_###CBOX_ID###')">###CONTENT###</div>
 <!-- ###CBOX### -->
