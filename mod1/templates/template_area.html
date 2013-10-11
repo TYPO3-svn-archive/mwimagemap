@@ -10,8 +10,7 @@ var hideoptions = '###L_HIDEOPTIONS###';
 	<input type="hidden" name="action" value="edit" />
 	<input type="hidden" name="map_id" value="###MID###" />
 	<input type="hidden" id="type" name="type" value="###VTYPE###" />
-	<input type="hidden" name="id" value="###PATHID###" />
-				
+	<input type="hidden" name="id" value="###PATHID###" />	
 	<a href="Javascript:a_toggle('l_area');"><h3 class="uppercase"><img src="img/minus.gif" border="0" id="l_areatoggle" alt="###L_SHOWOPTIONS###" title="###L_HIDEOPTIONS###" /> ###L_EDITAREA###</h3></a>
   <table cellpadding="0" id="l_area" cellspacing="0" style="border:1px solid #999999; margin:5px 0px 10px 0px; width:100%;">
     <tr>
@@ -291,14 +290,28 @@ function imgonclick(Event)
 	if ( is_a_obj(Event) ) return;
 
 	try {
-		if ( typeof Event.layerX == 'undefined' ) throw("bla");
-		posx += Event.layerX;
-		posy += Event.layerY;
+		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
+		if(navigator.appName == 'Microsoft Internet Explorer' && (navigator.appVersion.indexOf('MSIE 10') != -1 || navigator.appVersion.indexOf('MSIE 9') != -1)) {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		}
+		else {
+			posx += Event.layerX;
+			posy += Event.layerY;
+		}
 	} catch(e) {
 		try {
 			posx += window.event.offsetX;
 			posy += window.event.offsetY;
-		} catch(e) { alert(e+" Onclick functionality not supported!"); return; }
+		} catch(e) {
+			try {
+				posx += Event.layerX;
+				posy += Event.layerY;
+			}
+			catch(e) {
+				alert(e+" Onclick functionality not supported!"); return 1;
+			}
+		}
 	}
 	try {
 		if ( document.getElementById("occ").checked )
@@ -385,15 +398,31 @@ function imgonclick(Event)
 	if ( is_a_obj(Event) ) return;
 
 	try {
-		if ( typeof Event.layerX == 'undefined' ) throw("bla");
-		posx += Event.layerX;
-		posy += Event.layerY;
+		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
+		if(navigator.appName == 'Microsoft Internet Explorer' && (navigator.appVersion.indexOf('MSIE 10') != -1 || navigator.appVersion.indexOf('MSIE 9') != -1)) {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		}
+		else {
+			posx += Event.layerX;
+			posy += Event.layerY;
+		}
 	} catch(e) {
 		try {
 			posx += window.event.offsetX;
 			posy += window.event.offsetY;
-		} catch(e) { alert(e+" Onclick functionality not supported!"); return; }
+		} catch(e) {
+			try {
+				posx += Event.layerX;
+				posy += Event.layerY;
+			}
+			catch(e) {
+				alert(e+" Onclick functionality not supported!"); return 1;
+			}
+		}
 	}
+	
+	
 
 	try {
 		px = document.getElementById("xpos");
@@ -657,16 +686,31 @@ function mousemove(Event) {
 	}
 
 	try {
-		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
-		posx += Event.layerX;
-		posy += Event.layerY;
+		if ( typeof Event.layerX == 'undefined') { throw("");	}
+		if(navigator.appName == 'Microsoft Internet Explorer' && (navigator.appVersion.indexOf('MSIE 10') != -1 || navigator.appVersion.indexOf('MSIE 9') != -1)) {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		}
+		else {
+			posx += Event.layerX;
+			posy += Event.layerY;
+		}
 	} catch(e) {
 		try {
 			posx += window.event.offsetX;
 			posy += window.event.offsetY;
-		} catch(e) { alert(e+" Onclick functionality not supported!"); return 1; }
+		} catch(e) {
+		
+			try {
+				mouseposx += Event.layerX;
+				mouseposy += Event.layerY;
+			}
+			catch(e) {
+				alert(e+" Onclick functionality not supported!"); return 1;
+			}
+		}
 	}
-
+ 
 	if ( wrong_coord2 ) {
 		posx += wx2;
 		posy += wy2;
@@ -692,13 +736,27 @@ function mouseup(Event) {
 
 	try {
 		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
-		posx += Event.layerX;
-		posy += Event.layerY;
+		if(navigator.appName == 'Microsoft Internet Explorer' && (navigator.appVersion.indexOf('MSIE 10') != -1 || navigator.appVersion.indexOf('MSIE 9') != -1)) {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		}
+		else {
+			posx += Event.layerX;
+			posy += Event.layerY;
+		}
 	} catch(e) {
 		try {
 			posx += window.event.offsetX;
 			posy += window.event.offsetY;
-		} catch(e) { alert(e+" Onclick functionality not supported!"); return 1; }
+		} catch(e) {
+			try {
+				mouseposx += Event.layerX;
+				mouseposy += Event.layerY;
+			}
+			catch(e) {
+				alert(e+" Onclick functionality not supported!"); return 1;
+			}
+		}
 	}
 
 	if ( wrong_coord1 ) {
@@ -725,13 +783,27 @@ function mousedown(Event) {
 
 	try {
 		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
-		mouseposx += Event.layerX;
-		mouseposy += Event.layerY;
+		if(navigator.appName == 'Microsoft Internet Explorer' && (navigator.appVersion.indexOf('MSIE 10') != -1 || navigator.appVersion.indexOf('MSIE 9') != -1)) {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		}
+		else {
+			posx += Event.layerX;
+			posy += Event.layerY;
+		}
 	} catch(e) {
 		try {
 			mouseposx += window.event.offsetX;
 			mouseposy += window.event.offsetY;
-		} catch(e) { alert(e+" Onclick functionality not supported!"); return 1; }
+		} catch(e) {
+			try {
+				mouseposx += Event.layerX;
+				mouseposy += Event.layerY;
+			}
+			catch(e) {
+				alert(e+" Onclick functionality not supported!"); return 1;
+			}
+		}
 	}
 
 	if ( wrong_coord1 ) {
@@ -779,15 +851,29 @@ function is_a_obj(Event) {
 
 	try {
 		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
-		posx += Event.layerX;
-		posy += Event.layerY;
+		if(navigator.appName == 'Microsoft Internet Explorer' && (navigator.appVersion.indexOf('MSIE 10') != -1 || navigator.appVersion.indexOf('MSIE 9') != -1)) {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		}
+		else {
+			posx += Event.layerX;
+			posy += Event.layerY;
+		}
 	} catch(e) {
 		try {
 			posx += window.event.offsetX;
 			posy += window.event.offsetY;
-		} catch(e) { alert(e+" Onclick functionality not supported!"); return 1; }
+		} catch(e) {
+			try {
+				posx += Event.layerX;
+				mouseposy += Event.layerY;
+			}
+			catch(e) {
+				alert(e+" Onclick functionality not supported!"); return 1;
+			}
+		}
 	}
-
+	
 	if ( wrong_coord ) {
 		posx += wx;
 		posy += wy;

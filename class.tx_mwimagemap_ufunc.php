@@ -34,7 +34,7 @@ class tx_mwimagemap_ufunc {
 	}
 }
 
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mwimagemap/class.tx_mwimagemap_ufunc.php"]) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mwimagemap/class.tx_mwimagemap_ufunc.php"]);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mwimagemap/class.tx_mwimagemap_ufunc.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mwimagemap/class.tx_mwimagemap_ufunc.php']);
 }
 ?>

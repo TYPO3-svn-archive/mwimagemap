@@ -3,20 +3,20 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 require_once( t3lib_extMgm::extPath($_EXTKEY).'config_inc.php' );
 $tx_mwimagemap_extconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mwimagemap']);
-include_once(t3lib_extMgm::extPath($_EXTKEY)."class.tx_mwimagemap_ufunc.php");
-include_once(t3lib_extMgm::extPath($_EXTKEY)."class.tx_mwimagemap.php");
+include_once(t3lib_extMgm::extPath($_EXTKEY).'class.tx_mwimagemap_ufunc.php');
+include_once(t3lib_extMgm::extPath($_EXTKEY).'class.tx_mwimagemap.php');
 
 $damloaded = t3lib_extMgm::isLoaded('dam');
-if($damloaded == true) {
-	$p = fopen(t3lib_extMgm::extPath($_EXTKEY).'dam.txt','w+');
-	fputs($p,"true");
+if($damloaded == TRUE) {
+	$p = fopen(t3lib_extMgm::extPath($_EXTKEY).'dam.txt', 'w+');
+	fputs($p, 'true');
 	fclose($p);
 }
 else {
 	$dtext = file_get_contents(t3lib_extMgm::extPath($_EXTKEY).'dam.txt');
 	if($dtext == 'true') {
-		$p = fopen(t3lib_extMgm::extPath($_EXTKEY).'dam.txt','w+');
-		fputs($p,"false");
+		$p = fopen(t3lib_extMgm::extPath($_EXTKEY).'dam.txt', 'w+');
+		fputs($p, 'false');
 		fclose($p);
 	}
 }
@@ -31,13 +31,13 @@ $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='la
 // -------------------------------------------------------------------
 if($tx_mwimagemap_extconf['disable_IMAGE'] == 0) {
 $tempColumns = Array (
-      "tx_mwimagemap" => Array (
-      "label" => "LLL:EXT:mwimagemap/locallang_db.php:tt_content.tx_mwimagemap",
-			"exclude" => 1,                      // CR von Stefan Galinski
-			"config" => Array (
-				"type" => "select",
-				"size" => "1",
-				"itemsProcFunc" => "tx_mwimagemap->main",
+			'tx_mwimagemap' => Array (
+			'label' => 'LLL:EXT:mwimagemap/locallang_db.php:tt_content.tx_mwimagemap',
+			'exclude' => 1,											// CR by Stefan Galinski
+			'config' => Array (
+				'type' => 'select',
+				'size' => '1',
+				'itemsProcFunc' => 'tx_mwimagemap->main',
 				'wizards' => array(
 					'uproc' => array(
 						'type' => 'userFunc',
@@ -50,17 +50,13 @@ $tempColumns = Array (
 			),
 		),
 	);
-    
-t3lib_extMgm::addTCAcolumns("tt_content",$tempColumns,1);
+		
+t3lib_extMgm::addTCAcolumns('tt_content', $tempColumns, 1);
 
-$TCA["tt_content"]["palettes"][] = array(
-	'showitem' => "tx_mwimagemap",
-	'canNotCollapse' => 1,
-	)
-;
-end($TCA["tt_content"]["palettes"]);
-$p_key = key($TCA["tt_content"]["palettes"]);
-t3lib_extMgm::addToAllTCAtypes('tt_content','--palette--;LLL:EXT:mwimagemap/locallang_db.php:tx_mwimagemap;'.$p_key,'textpic,image');
+$TCA['tt_content']['palettes'][] = array( 'showitem' => 'tx_mwimagemap', 'canNotCollapse' => 1 );
+end($TCA['tt_content']['palettes']);
+$p_key = key($TCA['tt_content']['palettes']);
+t3lib_extMgm::addToAllTCAtypes('tt_content', '--palette--;LLL:EXT:mwimagemap/locallang_db.php:tx_mwimagemap;'.$p_key, 'textpic,image');
 }
 
 // --------------------------------------------
@@ -68,14 +64,13 @@ t3lib_extMgm::addToAllTCAtypes('tt_content','--palette--;LLL:EXT:mwimagemap/loca
 // --------------------------------------------
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1']='pi_flexform';
 
-# Wir definieren die Datei, die unser Flexform Schema enthält
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi1', '
 <T3DataStructure>
-  <ROOT>
-    <type>array</type>
-	  <el>
+	<ROOT>
+		<type>array</type>
+		<el>
 		<imagemap>
-		  <TCEforms>
+			<TCEforms>
 			<label>LLL:EXT:mwimagemap/locallang_db.php:tt_content.tx_select_imagemap</label>
 			<config>
 				<type>select</type>
@@ -86,17 +81,17 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi1', '
 				<size>1</size>
 				<disableNoMatchingValueElement>1</disableNoMatchingValueElement>
 			</config>
-		  </TCEforms>
+			</TCEforms>
 		</imagemap>
-    </el>
-  </ROOT>
+		</el>
+	</ROOT>
 </T3DataStructure>');
 
-t3lib_extMgm::addPlugin(Array('LLL:EXT:mwimagemap/locallang_db.php:tt_content.list_type_pi1', $_EXTKEY.'_pi1'),'list_type');
+t3lib_extMgm::addPlugin(Array('LLL:EXT:mwimagemap/locallang_db.php:tt_content.list_type_pi1', $_EXTKEY.'_pi1'), 'list_type');
 
-if (TYPO3_MODE=="BE")	{
-	if($damloaded == true) { t3lib_extMgm::addModule('txdamM1','mwimagemap','',t3lib_extMgm::extPath('mwimagemap')."mod1/"); }
-	else { t3lib_extMgm::addModule("file","txmwimagemapM1","",t3lib_extMgm::extPath($_EXTKEY)."mod1/"); }
-	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]["tx_mwimagemap_pi1_wizicon"] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_mwimagemap_pi1_wizicon.php';
+if (TYPO3_MODE=='BE')	{
+	if($damloaded == TRUE) { t3lib_extMgm::addModule('txdamM1', 'mwimagemap', '', t3lib_extMgm::extPath('mwimagemap').'mod1/'); }
+	else { t3lib_extMgm::addModule('file', 'txmwimagemapM1', '', t3lib_extMgm::extPath($_EXTKEY)."mod1/"); }
+	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_mwimagemap_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_mwimagemap_pi1_wizicon.php';
 }
 ?>

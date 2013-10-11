@@ -33,8 +33,8 @@
 		  return $ret;
 	  }
 
-	  function cImage($file,$conf) {
-		  $info = $this->getImgResource($file,$conf['file.']);
+	  function cImage($file, $conf) {
+		  $info = $this->getImgResource($file, $conf['file.']);
 	
 		  $GLOBALS['TSFE']->lastImageInfo=$info;
 		  if (is_array($info)) {
@@ -45,7 +45,7 @@
 			  $usemap	 = '';
 			  $imagemap = '';
 			  $db	= &$GLOBALS['TYPO3_DB'];
-		    if ( strpos($this->data['tx_mwimagemap'],';') !== FALSE ) {
+		    if ( strpos($this->data['tx_mwimagemap'], ';') !== FALSE ) {
 		      $mwim_id = explode(';', $this->data['tx_mwimagemap']);
 		      $mwim_id = intval($mwim_id[0]);
 			    $res = $db->sql_query('SELECT id, name FROM tx_mwimagemap_map where id='.$mwim_id);
@@ -109,9 +109,9 @@
 			  }
 			  $altParam = $this->getAltParam($conf);
 			  $theValue = '<img src="'.htmlspecialchars($GLOBALS['TSFE']->absRefPrefix.t3lib_div::rawUrlEncodeFP($info[3])).'" width="'.$info[0].'" height="'.$info[1].'"'.$this->getBorderAttr(' border="'.intval($conf['border']).'"').($conf['params']?' '.$conf['params']:'').($altParam).$usemap.' />'.$imagemap;
-			  if ($conf['linkWrap']) { $theValue = $this->linkWrap($theValue,$conf['linkWrap']); }
-			  elseif ($conf['imageLinkWrap']) { $theValue = $this->imageLinkWrap($theValue,$info['origFile'],$conf['imageLinkWrap.']); }
-			  return $this->wrap($theValue,$conf['wrap']);
+			  if ($conf['linkWrap']) { $theValue = $this->linkWrap($theValue, $conf['linkWrap']); }
+			  elseif ($conf['imageLinkWrap']) { $theValue = $this->imageLinkWrap($theValue, $info['origFile'], $conf['imageLinkWrap.']); }
+			  return $this->wrap($theValue, $conf['wrap']);
 		  }
 	  }
   }
