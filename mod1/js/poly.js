@@ -503,14 +503,28 @@ function imgonclick(Event)
 	if ( is_a_obj(Event) ) { return; }
 
 	try {
-		if ( typeof Event.layerX == 'undefined' ) { throw("bla"); }
-		posx += Event.layerX;
-		posy += Event.layerY;
+		if ( typeof Event.layerX == 'undefined' ) { throw("bla");	}
+		if(navigator.appName == 'Microsoft Internet Explorer' && (navigator.appVersion.indexOf('MSIE 10') != -1 || navigator.appVersion.indexOf('MSIE 9') != -1)) {
+			posx += window.event.offsetX;
+			posy += window.event.offsetY;
+		}
+		else {
+			posx += Event.layerX;
+			posy += Event.layerY;
+		}
 	} catch(e) {
 		try {
 			posx += window.event.offsetX;
 			posy += window.event.offsetY;
-		} catch(e) { alert(e+" Onclick functionality not supported!"); return; }
+		} catch(e) {
+			try {
+				posx += Event.layerX;
+				posy += Event.layerY;
+			}
+			catch(e) {
+				alert(e+" Onclick functionality not supported!"); return 1;
+			}
+		}
 	}
 	try {
 		document.getElementById("xpos"+pchecked).value = posx;

@@ -1,5 +1,6 @@
 <?php
-if(!TYPO3_MODE) { die("This script cannot be called directly."); }
+
+if(!TYPO3_MODE) { die('This script cannot be called directly.'); }
 
 function mwimagemap_getitems() {
 	if (TYPO3_MODE == 'BE') {
@@ -15,14 +16,14 @@ function mwimagemap_getitems() {
 		
 		$i = 0;
 		$opt = '';
-		if ( ! ($res = $GLOBALS['TYPO3_DB']->sql_query("SELECT id, name, folder FROM tx_mwimagemap_map order by name asc")) ) { return; }
+		if ( ! ($res = $GLOBALS['TYPO3_DB']->sql_query('SELECT id, name, folder FROM tx_mwimagemap_map order by name asc')) ) { return; }
 		while ( $row = $GLOBALS['TYPO3_DB']->sql_fetch_row( $res ) ) {
-			$show = false;
-			if($BE_USER->user['admin'] == 1) { $show = true; }
+			$show = FALSE;
+			if($BE_USER->user['admin'] == 1) { $show = TRUE; }
 			foreach( $filemounts as $val) {
-				$filemountDir = substr($val['path'],strlen(PATH_site));
-				if (!empty($filemountDir) && preg_match('/^'.preg_quote($filemountDir,'/').'/',$row[2]) || $BE_USER->user['admin'] == 1) {
-					$show = true;
+				$filemountDir = substr($val['path'], strlen(PATH_site));
+				if (!empty($filemountDir) && preg_match('/^'.preg_quote($filemountDir,'/').'/', $row[2]) || $BE_USER->user['admin'] == 1) {
+					$show = TRUE;
 					break;
 				}
 			}

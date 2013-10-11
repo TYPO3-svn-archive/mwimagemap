@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2012 Michael Perlbach  (info@mikelmade.de)
+*  (c) 2013 Michael Perlbach  (info@mikelmade.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -35,20 +35,18 @@ class tx_mwimagemap_pi1_wizicon {
 
 		$wizardItems['plugins_mwimagemap'] = array(
 			'icon'=>t3lib_extMgm::extRelPath('mwimagemap').'pi1/ce_wiz.gif',
-			'title'=>$LANG->getLLL('pi1_title',$LL),
-			'description'=>$LANG->getLLL('pi1_plus_wiz_description',$LL),
+			'title'=>$LANG->getLLL('pi1_title', $LL),
+			'description'=>$LANG->getLLL('pi1_plus_wiz_description', $LL),
 			'params'=>'&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=mwimagemap_pi1'
 		);
 
 		return $wizardItems;
 	}
 	function includeLocalLang()	{
-	  $LOCAL_LANG = $GLOBALS['LANG']->includeLLFile(t3lib_extMgm::extPath('mwimagemap').'locallang.xml',FALSE);
+	  $LOCAL_LANG = $GLOBALS['LANG']->includeLLFile(t3lib_extMgm::extPath('mwimagemap').'locallang.xml', FALSE);
 		return $LOCAL_LANG;
 	}
 }
-
-
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mwimagemap/pi1/class.tx_mwimagemap_pi1_wizicon.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mwimagemap/pi1/class.tx_mwimagemap_pi1_wizicon.php']);

@@ -41,7 +41,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 	/**
 	 * Returns the imagemap
 	 */
-	function main($content,$conf)	{
+	function main($content, $conf)	{
 		global $CLIENT;
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
@@ -50,14 +50,12 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mwimagemap']);
 		$this->title	 = $this->extConf['fe_title'];
 		$this->getarea = t3lib_div::_GP('mwi_area');
-		
 		$this->pi_initPIflexForm();
-		if ( ! ( $this->map_id = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'imagemap') ) ) { return ; }
+		if ( ! ( $this->map_id = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'imagemap') ) ) { return; }
 
 		$db = &$GLOBALS['TYPO3_DB'];
 		
 		$this->add_cbox_css = $this->conf['contentbox_additionalcss'];
-		
 		$this->template = $this->cObj->fileResource($this->conf['template']);
 		$this->javascript = $this->conf['javascript'];
 		
@@ -86,8 +84,8 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 		$this->markerArray['###IMAGE_HEIGHT###'] = $picsize[1];
 		
 		if(strlen($this->map[3]) != 0) {
-			$this->map[3] = str_replace('.png',$this->ov_ext,$this->map[3]);
-			$this->map[3] = str_replace('.gif',$this->ov_ext,$this->map[3]);
+			$this->map[3] = str_replace('.png', $this->ov_ext, $this->map[3]);
+			$this->map[3] = str_replace('.gif', $this->ov_ext, $this->map[3]);
 			$this->markerArray['###MAPCANVAS###'] = 'uploads/tx_mwimagemap/'.$this->map[3];
 		}
 		
@@ -98,7 +96,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 			return;
 	 }
 
-		$this->cbox = false;
+		$this->cbox = FALSE;
 		$this->borderoptions = array();
 		$this->markerArray['###ROIMAGES###'] = '';
 		while ( $this->area_row = $db->sql_fetch_row( $this->area_res ) ) {
@@ -107,7 +105,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 			}
 			else {
 				while ( $this->content_row = $db->sql_fetch_row( $this->content_res ) ) {
-					$this->cbox = true;
+					$this->cbox = TRUE;
 					$this->contentboxes .= $this->generateContentBox();
 				}
 			}
@@ -117,8 +115,8 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 			}
 		
 			if(intval($this->area_row[5]) == 2) {
-				$this->area_row[8] = str_replace('.png',$this->ov_ext,$this->area_row[8]);
-				$this->area_row[8] = str_replace('.gif',$this->ov_ext,$this->area_row[8]);
+				$this->area_row[8] = str_replace('.png', $this->ov_ext, $this->area_row[8]);
+				$this->area_row[8] = str_replace('.gif', $this->ov_ext, $this->area_row[8]);
 				if(file_exists(PATH_site.'uploads/tx_mwimagemap/'.$this->area_row[8])) {
 					$this->defimg = '';
 					$this->markerArray['###ROIMAGES###'] .= "\n".'<img src="uploads/tx_mwimagemap/'.$this->area_row[8].'" id="tx_mwimagemap_altfefile_'.$this->area_row[0].'" alt="" usemap="#map_'.$this->cObj->data['uid'].'" style="border:0px;visibility:hidden;display:none;" />';
@@ -139,81 +137,81 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 					$this->romout = 'onmouseout="Javascript:mwimagemap_resetarea(\'tx_mwimagemap_img_'.$this->cObj->data['uid'].'\',\''.$this->xmap.'\'); ';
 					
 					if(preg_match("/onmouseover/i", $this->area_row[3])) {
-						$this->aparams = explode (" ",$this->area_row[3]);
+						$this->aparams = explode (' ', $this->area_row[3]);
 						$i=0;
 						while($i<count($this->aparams)) {
 							if (preg_match("/onmouseover/i", $this->aparams[$i])) {
-								$this->aparams[$i] = $this->correctParams('onmouseover',$this->aparams[$i]);
+								$this->aparams[$i] = $this->correctParams('onmouseover', $this->aparams[$i]);
 								$this->aparams[$i] = $this->romov.$this->aparams[$i].'"';
 								break;
 							}
 							$i++;
 						}
-						$this->area_row[3] = join(' ',$this->aparams);
+						$this->area_row[3] = implode(' ', $this->aparams);
 					}
 					else if(preg_match("/onmouseout/i", $this->area_row[3])) {
-						$this->aparams = explode (" ",$this->area_row[3]);
+						$this->aparams = explode (' ', $this->area_row[3]);
 						$i=0;
 						while($i<count($this->aparams)) {
 							if (preg_match("/onmouseout/i", $this->aparams[$i])) {
-								$this->aparams[$i] = $this->correctParams('onmouseout',$this->aparams[$i]);
+								$this->aparams[$i] = $this->correctParams('onmouseout', $this->aparams[$i]);
 								$this->aparams[$i] = $this->romout.$this->aparams[$i].'"';
 								break;
 							}
 							$i++;
 						}
-						$this->area_row[3] = join(' ',$this->aparams);
+						$this->area_row[3] = implode(' ', $this->aparams);
 					}
 					else { $this->area_row[3] = $this->romov.'" '.$this->romout.'"'; }
 				}
 			}
 		
 			if($this->area_row[5] == 1 || $this->area_row[5] == 2) {
-				$this->borderoptions[] = array($this->area_row[0],$this->area_row[5],$this->area_row[6],$this->area_row[7],$this->area_row[8]);
+				$this->borderoptions[] = array($this->area_row[0], $this->area_row[5], $this->area_row[6], $this->area_row[7], $this->area_row[8]);
 			}
 
 			if(strlen($this->area_row[3]) == 0 || !preg_match("/alt\=/i", $this->area_row[3])) { $this->area_row[3] .= ' alt="'.$this->area_row[4].'"'; } // adding default alt-attribute in case of its absence
 			if ( ! ( $this->point_res = $db->sql_query('SELECT x, y FROM tx_mwimagemap_point WHERE aid = '.$this->area_row[0].' ORDER BY num') ) ) { continue; }
 
-			if($this->cbox == true) {
+			if($this->cbox == TRUE) {
 				if(preg_match("/onmouseover/i", $this->area_row[3])) {
-					$this->aparams = explode (" ",$this->area_row[3]);
+					$this->aparams = explode (' ', $this->area_row[3]);
 					$i=0;
 					while($i<count($this->aparams)) {
 						if (preg_match("/onmouseover/i", $this->aparams[$i])) {
 							$this->romov = 'onmouseover="';
-							$this->aparams[$i] = $this->correctParams('onmouseover',$this->aparams[$i]);
-							$this->romov = str_replace('onmouseover="','onmouseover="Javascript:mwimagemap_showCBox(\'txmwimagemap_cbox_'.$this->cObj->data['uid'].'_'.$this->area_row[0].'\'); ',$this->romov);
+							$this->aparams[$i] = $this->correctParams('onmouseover', $this->aparams[$i]);
+							$this->romov = str_replace('onmouseover="','onmouseover="Javascript:mwimagemap_showCBox(\'txmwimagemap_cbox_'.$this->cObj->data['uid'].'_'.$this->area_row[0].'\'); ', $this->romov);
 							$this->aparams[$i] = $this->romov.$this->aparams[$i];
 							break;
 						}
 						$i++;
 					}
-					$this->area_row[3] = join(' ',$this->aparams);
+					$this->area_row[3] = implode(' ', $this->aparams);
 					$this->area_row[3] .= '"';
 				}
 				else { $this->area_row[3] .= ' onmouseover="Javascript:mwimagemap_showCBox(\'txmwimagemap_cbox_'.$this->cObj->data['uid'].'_'.$this->area_row[0].'\');"'; }
 				if(preg_match("/onmouseout/i", $this->area_row[3])) {
-					$this->aparams = explode (" ",$this->area_row[3]);
+					$this->aparams = explode (' ', $this->area_row[3]);
 					$i=0;
 					$this->romout = '';
 					while($i<count($this->aparams)) {
 						if (preg_match("/onmouseout/i", $this->aparams[$i])) {
 							$this->romout = 'onmouseout="';
-							$this->aparams[$i] = $this->correctParams('onmouseout',$this->aparams[$i]);
-							$this->romout = str_replace('onmouseout="','onmouseout="Javascript:mwimagemap_hideCBox(\'txmwimagemap_cbox_'.$this->cObj->data['uid'].'_'.$this->area_row[0].'\'); ',$this->romout);
+							$this->aparams[$i] = $this->correctParams('onmouseout', $this->aparams[$i]);
+							$this->romout = str_replace('onmouseout="', 'onmouseout="Javascript:mwimagemap_hideCBox(\'txmwimagemap_cbox_'.$this->cObj->data['uid'].'_'.$this->area_row[0].'\'); ', $this->romout);
 							$this->aparams[$i] = $this->romout.$this->aparams[$i];
 							break;
 						}
 						$i++;
 					}
-					$this->area_row[3] = join(' ',$this->aparams);
+					$this->area_row[3] = implode(' ', $this->aparams);
 					$this->area_row[3] .= '"';
 				}
 				else { $this->area_row[3] .= ' onmouseout="Javascript:mwimagemap_hideCBox(\'txmwimagemap_cbox_'.$this->cObj->data['uid'].'_'.$this->area_row[0].'\');"'; }
 			}
-			$this->area_row[3] = str_replace(';Javascript:',';',$this->area_row[3]);
-			$this->area_row[3] = str_replace('"""','"',$this->area_row[3]);
+			$this->area_row[3] = str_replace(';Javascript:', ';', $this->area_row[3]);
+			$this->area_row[3] = str_replace('"""', '"', $this->area_row[3]);
 			
 			$this->link = $this->create_link_from_browser( $this->area_row[2] );
 			switch( $this->area_row[1] ) {
@@ -221,14 +219,14 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 					if ( $db->sql_num_rows( $this->point_res ) != 2 ) { continue; }
 					$this->row = $db->sql_fetch_row($this->point_res);
 					$this->row1 = $db->sql_fetch_row($this->point_res);
-					$this->areas .= $this->generateArea('rect',$this->row1[0].','.$this->row1[1].','.($this->row[0]+$this->row1[0]).','.($this->row[1]+$this->row1[1]));
+					$this->areas .= $this->generateArea('rect', $this->row1[0].','.$this->row1[1].','.($this->row[0]+$this->row1[0]).','.($this->row[1]+$this->row1[1]));
 				break;
 				
 				case MWIM_CIRCLE:
 					if ( $db->sql_num_rows( $this->point_res ) != 2 ) { continue; }
 					$this->row = $db->sql_fetch_row($this->point_res);
 					$this->row1 = $db->sql_fetch_row($this->point_res);
-					$this->areas .= $this->generateArea('circle',$this->row1[0].','.$this->row1[1].','.$this->row[0]);
+					$this->areas .= $this->generateArea('circle', $this->row1[0].','.$this->row1[1].','.$this->row[0]);
 				break;
 			
 				case MWIM_POLYGON:
@@ -236,11 +234,11 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 					$i = 0;
 					$this->coords = '';
 					while ( $this->row = $db->sql_fetch_row($this->point_res) ) { $this->coords .= ($i++?',':'').$this->row[0].','.$this->row[1]; }
-					$this->areas .= $this->generateArea('poly',$this->coords);
+					$this->areas .= $this->generateArea('poly', $this->coords);
 				break;
 			
 				case MWIM_DEFAULT:
-					$this->areas .= $this->generateArea('def','0,0,'.$this->imgsize[0].','.$this->imgsize[1]);
+					$this->areas .= $this->generateArea('def', '0,0,'.$this->imgsize[0].','.$this->imgsize[1]);
 				break;
 			
 				default:
@@ -284,7 +282,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 				if ( $url[2] < 1 || $url[3] < 1 ) { $url[2] = $url[3] = ''; }
 			}
 			else {
-				$this->linkparams = explode(' ',$txt);
+				$this->linkparams = explode(' ', $txt);
 				$url[1] = substr($txt, $pos + 1);
 				$url[2] = '';
 				$url[3] = '';
@@ -314,16 +312,16 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 	* @param	string		a string containing the parameters.
 	* @return string
 	*/
-	function correctParams($event,$pstring) {
-		$pstring = str_ireplace('javascript:','',trim(rtrim($pstring)));
-		$pstring = str_ireplace($event,'',$pstring);
-		$pstring = str_ireplace('=','',$pstring);
+	function correctParams($event, $pstring) {
+		$pstring = str_ireplace('javascript:', '', trim(rtrim($pstring)));
+		$pstring = str_ireplace($event, '', $pstring);
+		$pstring = str_ireplace('=', '', $pstring);
 		$quotepos = strpos($pstring, '"');
 		$quotepos_end = strrpos($pstring, '"');
 		$str_len = $quotepos_end - $quotepos;
 		$badquote = substr($pstring, $quotepos, $str_len+1);
-		$badquote2 = str_replace('"',"",$badquote);
-		$badquote3 = str_replace(",","",$badquote2);
+		$badquote2 = str_replace('"', '', $badquote);
+		$badquote3 = str_replace(',', '', $badquote2);
 		$pstring			= str_replace($badquote, $badquote3, $pstring);
 		return $pstring;
 	}
@@ -335,19 +333,19 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 	*	@param	string		coordinates.	
 	* @return string
 	*/
-	protected function generateArea ($shape='def',$coords) {
+	protected function generateArea ($shape='def', $coords) {
 		$mA['###SHAPE###'] = $shape;
 		$mA['###ADDPARAMS###'] = $this->area_row[3];
 		$mA['###COORDS###'] = $coords;
-		$linkparts = explode(' ',$this->link);
+		$linkparts = explode(' ', $this->link);
 		$mA['###LINK###'] = '';
 		$mA['###TARGET###'] = '';
 	
 		foreach($linkparts as $linkpart) {
-			if(preg_match('/href\=/',$linkpart)) { $mA['###LINK###'] = str_replace(array('href=','"'),'',$linkpart); }
-			else if(preg_match('/target\=/',$linkpart)) { $mA['###TARGET###'] = str_replace(array('target=','"'),'',$linkpart); }
+			if(preg_match('/href\=/', $linkpart)) { $mA['###LINK###'] = str_replace(array('href=', '"'), '', $linkpart); }
+			else if(preg_match('/target\=/', $linkpart)) { $mA['###TARGET###'] = str_replace(array('target=', '"'), '', $linkpart); }
 		}
-		$area = str_replace('target=""','',$this->cObj->substituteMarkerArray($this->areasubpart, $mA));
+		$area = str_replace('target=""', '', $this->cObj->substituteMarkerArray($this->areasubpart, $mA));
 		return $area;
 	}
 	
@@ -365,7 +363,7 @@ class tx_mwimagemap_pi1 extends tslib_pibase {
 		$mA['###CSS_TOP###'] = (!empty($this->content_row[4])) ? 'top:'.$this->content_row[4].'px;' : 'top:0px;';
 		$mA['###CSS_BORDER###'] = (!empty($this->content_row[6]) && !empty($this->content_row[5])) ? 'border:'.$this->content_row[6].'px solid '.$this->content_row[5].';' : '';
 		$mA['###CSS_ADDITIONAL###'] = $this->add_cbox_css;
-		$tt_content_conf = array('tables' => 'tt_content','source' => $this->content_row[0],'dontCheckPid' => 1);
+		$tt_content_conf = array('tables' => 'tt_content', 'source' => $this->content_row[0], 'dontCheckPid' => 1);
 		$mA['###CONTENT###'] = $this->cObj->RECORDS($tt_content_conf);
 		return $this->cObj->substituteMarkerArray($this->cboxsubpart, $mA);
 	}
